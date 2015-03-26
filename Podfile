@@ -1,4 +1,5 @@
 xcodeproj 'Example/SPLFormular'
+use_frameworks!
 
 target 'SPLFormular', :exclusive => true do
   pod "SPLFormular", :path => "."

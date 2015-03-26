@@ -17,14 +17,12 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/OliverLetterer/SPLFormular.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/oletterer'
 
-  s.platform     = :ios, '7.0'
+  s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.source_files = 'SPLFormular'
-  # s.resource_bundles = {
-  #   'SPLFormular' => [ 'SPLFormular/Resources/*' ]
-  # }
+  s.source_files = 'SPLFormular', 'SPLFormular/Private'
+  s.private_header_files = 'SPLFormular/Private'
 
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'SPLTableViewBehavior', '~> 0.5.0'
 end

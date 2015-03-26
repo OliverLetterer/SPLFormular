@@ -8,6 +8,8 @@
 
 @import UIKit;
 
-@interface SPLViewController : UIViewController
+@interface SPLViewController : UITableViewController
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
 
 @end
