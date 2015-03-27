@@ -13,34 +13,6 @@
 
 @implementation SPLFormular
 
-- (NSArray *)visibleSections
-{
-    NSMutableArray *visibleSections = [NSMutableArray array];
-    for (SPLFormSection *section in self) {
-
-        NSMutableArray *visibleFields = [NSMutableArray array];
-        for (id<SPLFormField> field in section) {
-            if (!self.predicates[field.property]) {
-                [visibleFields addObject:field];
-                continue;
-            }
-
-            NSPredicate *predicate = self.predicates[field.property];
-            if ([predicate evaluateWithObject:self.object]) {
-                [visibleFields addObject:field];
-            }
-        }
-
-        if (visibleFields.count > 0) {
-            [visibleSections addObject:[[SPLFormSection alloc] initWithName:section.name fields:^NSArray *{
-                return visibleFields;
-            }]];
-        }
-    }
-    
-    return visibleSections;
-}
-
 - (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections
 {
     return [self initWithObject:object sections:sections predicates:nil];

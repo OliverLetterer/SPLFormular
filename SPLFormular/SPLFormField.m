@@ -98,6 +98,14 @@ static double doubleValue(NSString *text)
     textFieldCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     __weakify(self);
+
+    void(^textFieldHandler)(SPLFormTextFieldCell *cell) = ^(SPLFormTextFieldCell *cell) {
+        __strongify(self);
+
+        [self _deselectTableViewCell:cell];
+        [cell.textField becomeFirstResponder];
+    };
+
     switch (self.type) {
         case SPLFormFieldTypeHumanText: {
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
@@ -109,6 +117,7 @@ static double doubleValue(NSString *text)
 
                 id value = [self.object valueForKey:self.property];
 
+                cell.textLabel.text = self.name;
                 cell.textField.text = value;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
@@ -116,9 +125,7 @@ static double doubleValue(NSString *text)
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = NO;
                 cell.textField.keyboardType = UIKeyboardTypeAlphabet;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypeMachineText: {
@@ -131,6 +138,7 @@ static double doubleValue(NSString *text)
 
                 id value = [self.object valueForKey:self.property];
 
+                cell.textLabel.text = self.name;
                 cell.textField.text = value;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -138,9 +146,7 @@ static double doubleValue(NSString *text)
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = NO;
                 cell.textField.keyboardType = UIKeyboardTypeAlphabet;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypeEMail: {
@@ -153,6 +159,7 @@ static double doubleValue(NSString *text)
 
                 id value = [self.object valueForKey:self.property];
 
+                cell.textLabel.text = self.name;
                 cell.textField.text = value;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -160,9 +167,7 @@ static double doubleValue(NSString *text)
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = NO;
                 cell.textField.keyboardType = UIKeyboardTypeEmailAddress;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypePassword: {
@@ -175,6 +180,7 @@ static double doubleValue(NSString *text)
 
                 id value = [self.object valueForKey:self.property];
 
+                cell.textLabel.text = self.name;
                 cell.textField.text = value;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -182,9 +188,7 @@ static double doubleValue(NSString *text)
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = YES;
                 cell.textField.keyboardType = UIKeyboardTypeAlphabet;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypeURL: {
@@ -197,6 +201,7 @@ static double doubleValue(NSString *text)
 
                 id value = [self.object valueForKey:self.property];
 
+                cell.textLabel.text = self.name;
                 cell.textField.text = value;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -204,9 +209,7 @@ static double doubleValue(NSString *text)
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = NO;
                 cell.textField.keyboardType = UIKeyboardTypeURL;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypeNumber: {
@@ -225,15 +228,14 @@ static double doubleValue(NSString *text)
                     cell.textField.text = value;
                 }
 
+                cell.textLabel.text = self.name;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = NO;
                 cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypePrice: {
@@ -246,6 +248,7 @@ static double doubleValue(NSString *text)
 
                 id value = [self.object valueForKey:self.property];
 
+                cell.textLabel.text = self.name;
                 cell.textField.text = value ? [NSString stringWithFormat:@"%0.02lf", [value doubleValue]] : nil;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -253,9 +256,7 @@ static double doubleValue(NSString *text)
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = NO;
                 cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypeIPAddress: {
@@ -268,6 +269,7 @@ static double doubleValue(NSString *text)
 
                 id value = [self.object valueForKey:self.property];
 
+                cell.textLabel.text = self.name;
                 cell.textField.text = value ? [NSString stringWithFormat:@"%@", value] : nil;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -275,13 +277,11 @@ static double doubleValue(NSString *text)
                 cell.textField.accessibilityLabel = cell.textLabel.text;
                 cell.textField.secureTextEntry = NO;
                 cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-            } action:^(SPLFormTextFieldCell *cell) {
-                [cell.textField becomeFirstResponder];
-            }];
+            } action:textFieldHandler];
             break;
         }
         case SPLFormFieldTypeBoolean: {
-            _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormSwitchCell *cell) {
+            _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:switchCell configuration:^(SPLFormSwitchCell *cell) {
                 __strongify(self);
 
                 if (![cell.switchControl.allTargets containsObject:self]) {
@@ -289,10 +289,13 @@ static double doubleValue(NSString *text)
                 }
 
                 id value = [self.object valueForKey:self.property];
-                [switchCell.switchControl setOn:[value boolValue] animated:NO];
+
+                cell.textLabel.text = self.name;
+                [cell.switchControl setOn:[value boolValue] animated:NO];
             } action:^(SPLFormSwitchCell *cell) {
                 __strongify(self);
 
+                [self _deselectTableViewCell:cell];
                 [cell.switchControl setOn:!cell.switchControl.isOn animated:YES];
                 [self _switchChanged:cell.switchControl];
             }];
@@ -359,6 +362,17 @@ static double doubleValue(NSString *text)
 {
     [self.object setValue:@(sender.isOn) forKey:self.property];
     self.changeObserver(self);
+}
+
+- (void)_deselectTableViewCell:(UITableViewCell *)cell
+{
+    UIView *superview = cell.superview;
+    while (![superview isKindOfClass:[UITableView class]] && superview) {
+        superview = superview.superview;
+    }
+
+    UITableView *tableView = (UITableView *)superview;
+    [tableView deselectRowAtIndexPath:tableView.indexPathForSelectedRow animated:NO];
 }
 
 @end

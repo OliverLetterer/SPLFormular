@@ -24,5 +24,5 @@ Pod::Spec.new do |s|
   s.private_header_files = 'SPLFormular/Private'
 
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'SPLTableViewBehavior', '~> 0.5.0'
+  s.dependency 'SPLTableViewBehavior', '~> 0.6.0'
 end

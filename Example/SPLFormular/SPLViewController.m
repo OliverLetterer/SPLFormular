@@ -39,6 +39,7 @@
 @interface SPLViewController ()
 
 @property (nonatomic, readonly) SPLFormular *formular;
+@property (nonatomic, readonly) SPLCompoundBehavior *tableViewBehavior;
 
 @end
 
@@ -71,6 +72,7 @@
                      [[SPLFormField alloc] initWithObject:object property:@selector(passwordConfirmation) name:@"Password confirmation" type:SPLFormFieldTypePassword],
                      [[SPLFormField alloc] initWithObject:object property:@selector(isHuman) name:@"I am a human" type:SPLFormFieldTypeBoolean],
                      [[SPLFormField alloc] initWithObject:object property:@selector(hasHomepage) name:@"Homepage?" type:SPLFormFieldTypeBoolean],
+                     [[SPLFormField alloc] initWithObject:object property:@selector(homepage) name:@"Homepage" type:SPLFormFieldTypeURL],
                      ];
         }];
 
@@ -85,6 +87,7 @@
 
         NSDictionary *predicates = @{
                                      @"homepage": [NSPredicate predicateWithFormat:@"hasHomepage == YES"],
+                                     @"hasHomepage": [NSPredicate predicateWithFormat:@"isHuman == YES"],
                                      @"username": [NSPredicate predicateWithFormat:@"isHuman == YES"],
                                      @"firstName": [NSPredicate predicateWithFormat:@"isHuman == YES"],
                                      @"lastName": [NSPredicate predicateWithFormat:@"isHuman == YES"],
@@ -92,17 +95,11 @@
                                      @"zip": [NSPredicate predicateWithFormat:@"isHuman == YES"],
                                      @"city": [NSPredicate predicateWithFormat:@"isHuman == YES"],
                                      @"country": [NSPredicate predicateWithFormat:@"isHuman == YES"],
+                                     @"passwordConfirmation": [NSPredicate predicateWithFormat:@"password.length > 0"],
                                      };
 
         _formular = [[SPLFormular alloc] initWithObject:object sections:@[ section0, section1, section2 ] predicates:predicates];
-
-        for (SPLFormSection *s in _formular) {
-            for (SPLFormField *f in s) {
-                [f setChangeObserver:^(id<SPLFormField> sender) {
-
-                }];
-            }
-        }
+        _tableViewBehavior = [[SPLCompoundBehavior alloc] initWithFormular:_formular];
     }
     return self;
 }
@@ -118,6 +115,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.tableViewBehavior.update = self.tableView.tableViewUpdate;
+    self.tableView.delegate = self.tableViewBehavior;
+    self.tableView.dataSource = self.tableViewBehavior;
 
     self.tableView.rowHeight = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 88.0 : 66.0;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
