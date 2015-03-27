@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
 #import <SPLTableViewBehavior/SPLTableViewBehavior.h>
 
 #import <SPLFormular/SPLFormField.h>
@@ -18,6 +20,9 @@
 #import <SPLFormular/SPLFormTableViewCell.h>
 #import <SPLFormular/SPLFormTextFieldCell.h>
 #import <SPLFormular/SPLFormSwitchCell.h>
+
+#import <SPLFormular/SPLObjectSnapshot.h>
+#import <SPLFormular/SPLFormViewController.h>
 
 
 

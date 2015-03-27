@@ -16,6 +16,16 @@
 
 @implementation SPLCompoundBehavior (SPLFormular)
 
+- (void)setFormularChangeObserver:(dispatch_block_t)formularChangeObserver
+{
+    objc_setAssociatedObject(self, @selector(formularChangeObserver), formularChangeObserver, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (dispatch_block_t)formularChangeObserver
+{
+    return objc_getAssociatedObject(self, @selector(formularChangeObserver));
+}
+
 - (SPLFormular *)formular
 {
     return objc_getAssociatedObject(self, @selector(formular));
@@ -80,6 +90,10 @@
 
     [self setVisibleBehaviors:visibleSections withRowAnimation:UITableViewRowAnimationTop];
     [self.update tableViewBehaviorEndUpdates:self];
+
+    if (self.formularChangeObserver) {
+        self.formularChangeObserver();
+    }
 }
 
 @end

@@ -6,10 +6,14 @@
 //  Copyright (c) 2014 Oliver Letterer. All rights reserved.
 //
 
-@import UIKit;
+#import <UIKit/UIKit.h>
+#import <SPLFormular/SPLFormular.h>
 
-@interface SPLViewController : UITableViewController
+
+
+@interface SPLViewController : SPLFormViewController
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular behavior:(id<SPLTableViewBehavior>)behavior UNAVAILABLE_ATTRIBUTE;
 
 @end
