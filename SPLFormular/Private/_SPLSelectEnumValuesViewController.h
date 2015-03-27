@@ -35,6 +35,7 @@
 @property (nonatomic, strong) NSArray *additionalRightBarButtonItems;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)initWithStyle:(UITableViewStyle)style UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithField:(id<SPLFormField>)field humanReadableOptions:(NSArray *)options values:(NSArray *)values NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -59,7 +59,7 @@
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
     [self doesNotRecognizeSelector:_cmd];
-    return [self init];
+    return [self initWithStyle:style formular:nil behavior:nil];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular

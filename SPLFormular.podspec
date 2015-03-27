@@ -10,7 +10,7 @@
 Pod::Spec.new do |s|
   s.name             = "SPLFormular"
   s.version          = "0.1.0"
-  s.summary          = "A short description of SPLFormular."
+  s.summary          = "Simply dynamic formulars, backed by SPLTableViewBehavior."
   s.homepage         = "https://github.com/OliverLetterer/SPLFormular"
   s.license          = 'MIT'
   s.author           = { "Oliver Letterer" => "oliver.letterer@gmail.com" }
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'SPLFormular', 'SPLFormular/Private'
-  s.private_header_files = 'SPLFormular/Private'
+  s.private_header_files = 'SPLFormular/Private/*.h'
 
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'SPLTableViewBehavior', '~> 0.6.0'
