@@ -76,22 +76,32 @@
 
         SPLFormSection *section1 = [[SPLFormSection alloc] initWithFields:^NSArray *{
             return @[
-//                     [[SPLFormField alloc] initWithObject:object property:@selector(username) name:@"Username" type:SPLFormFieldTypeHumanText],
+                     [[SPLFormField alloc] initWithObject:object property:@selector(username) name:@"Username" type:SPLFormFieldTypeHumanText],
                      [[SPLFormField alloc] initWithObject:object property:@selector(email) name:@"E-Mail" type:SPLFormFieldTypeEMail],
                      [[SPLFormField alloc] initWithObject:object property:@selector(password) name:@"Password" type:SPLFormFieldTypePassword],
                      [[SPLFormField alloc] initWithObject:object property:@selector(passwordConfirmation) name:@"Password confirmation" type:SPLFormFieldTypePassword],
                      [[SPLFormField alloc] initWithObject:object property:@selector(isHuman) name:@"I am a human" type:SPLFormFieldTypeBoolean],
-//                     [[SPLFormField alloc] initWithObject:object property:@selector(hasHomepage) name:@"Homepage?" type:SPLFormFieldTypeBoolean],
-//                     [[SPLFormField alloc] initWithObject:object property:@selector(homepage) name:@"Homepage" type:SPLFormFieldTypeURL],
+                     [[SPLFormField alloc] initWithObject:object property:@selector(hasHomepage) name:@"Homepage?" type:SPLFormFieldTypeBoolean],
+                     [[SPLFormField alloc] initWithObject:object property:@selector(homepage) name:@"Homepage" type:SPLFormFieldTypeURL],
                      ];
         }];
 
         SPLFormSection *section2 = [[SPLFormSection alloc] initWithName:@"Address" fields:^NSArray *{
             return @[
                      [[SPLFormField alloc] initWithObject:object property:@selector(street) name:@"Street" type:SPLFormFieldTypeHumanText],
-//                     [[SPLFormField alloc] initWithObject:object property:@selector(zip) name:@"ZIP Code" type:SPLFormFieldTypeNumber],
-//                     [[SPLFormField alloc] initWithObject:object property:@selector(city) name:@"City" type:SPLFormFieldTypeHumanText],
+                     [[SPLFormField alloc] initWithObject:object property:@selector(zip) name:@"ZIP Code" type:SPLFormFieldTypeNumber],
+                     [[SPLFormField alloc] initWithObject:object property:@selector(city) name:@"City" type:SPLFormFieldTypeHumanText],
                      [[SPLFormField alloc] initWithObject:object property:@selector(country) name:@"Country" type:SPLFormFieldTypeHumanText],
+                     ];
+        }];
+
+        NSArray *options = @[ @"First option", @"Second option", @"Third option" ];
+        NSArray *values = @[ @"First value", @"Second value", @"Third value" ];
+
+        SPLFormSection *section3 = [[SPLFormSection alloc] initWithName:@"ENUMS" fields:^NSArray *{
+            return @[
+                     [[SPLFormEnumField alloc] initWithObject:object property:@selector(hearedAboutUsFrom) name:@"Von wo kennst du uns?" humanReadableOptions:options values:values],
+                     [[SPLFormEnumField alloc] initWithObject:object property:@selector(multipleSelection) name:@"Mehrfachauswahl" humanReadableOptions:options values:values],
                      ];
         }];
 
@@ -113,7 +123,7 @@
             cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:object.date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
         }];
 
-        _formular = [[SPLFormular alloc] initWithObject:object sections:@[ section0, section1, section2 ] predicates:predicates];
+        _formular = [[SPLFormular alloc] initWithObject:object sections:@[ section0, section1, section2, section3 ] predicates:predicates];
         SPLCompoundBehavior *formBehavior = [[SPLCompoundBehavior alloc] initWithFormular:_formular];
 
         _tableViewBehavior = [[SPLCompoundBehavior alloc] initWithBehaviors:@[

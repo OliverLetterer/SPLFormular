@@ -10,6 +10,7 @@
 #import <SPLTableViewBehavior/SPLTableViewBehavior.h>
 
 #import <SPLFormular/SPLFormField.h>
+#import <SPLFormular/SPLFormEnumField.h>
 #import <SPLFormular/SPLFormFieldProtocol.h>
 #import <SPLFormular/SPLFormSection.h>
 #import <SPLFormular/SPLCompoundBehavior+SPLFormular.h>

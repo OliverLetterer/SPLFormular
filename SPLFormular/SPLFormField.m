@@ -23,19 +23,6 @@ static double doubleValue(NSString *text)
 @implementation SPLFormField
 @synthesize tableViewBehavior = _tableViewBehavior;
 
-- (BOOL)isEqual:(id)object
-{
-    if ([object isKindOfClass:[SPLFormField class]]) {
-        return [self isEqualToField:object];
-    }
-    return [super isEqual:object];
-}
-
-- (BOOL)isEqualToField:(SPLFormField *)field
-{
-    return [self.property isEqual:field.property] && [self.name isEqual:field.name];
-}
-
 #pragma mark - Initialization
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type

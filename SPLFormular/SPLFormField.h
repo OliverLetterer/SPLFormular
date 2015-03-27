@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import <SPLFormular/SPLFormFieldProtocol.h>
 
 typedef NS_ENUM(NSInteger, SPLFormFieldType) {
@@ -40,8 +39,6 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 @property (nonatomic, unsafe_unretained, readonly) id object;
 
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
-
-- (BOOL)isEqualToField:(SPLFormField *)field;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type NS_DESIGNATED_INITIALIZER;

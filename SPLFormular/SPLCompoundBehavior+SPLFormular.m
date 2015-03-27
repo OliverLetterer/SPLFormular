@@ -55,7 +55,6 @@
     [self.update tableViewBehaviorBeginUpdates:self];
 
     NSMutableArray *visibleSections = [NSMutableArray array];
-
     [self.formular.sections enumerateObjectsUsingBlock:^(SPLFormSection *section, NSUInteger sectionIndex, BOOL *stop) {
         SPLSectionBehavior *sectionBehavior = self.behaviors[sectionIndex];
         NSMutableArray *visibleBehaviors = [NSMutableArray array];
