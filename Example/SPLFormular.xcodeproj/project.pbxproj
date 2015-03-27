@@ -21,6 +21,9 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		A6F0E61CBB94C64C64707E18 /* Pods_SPLFormular.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CEE913529F7CAC30CB5DB45 /* Pods_SPLFormular.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A73456A41AC5AB9700152186 /* CoreDataStack.m in Sources */ = {isa = PBXBuildFile; fileRef = A73456A11AC5AB9700152186 /* CoreDataStack.m */; };
+		A73456A51AC5AB9700152186 /* ManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A73456A31AC5AB9700152186 /* ManagedObject.m */; };
+		A73456A71AC5AE0000152186 /* CoreDataStack.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A73456A61AC5AE0000152186 /* CoreDataStack.xcdatamodel */; };
 		F759060F7CA6B361C66C4CFE /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 390A96CE8E7704B9004A1A97 /* Pods_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -59,6 +62,11 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		A73456A01AC5AB9700152186 /* CoreDataStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataStack.h; sourceTree = "<group>"; };
+		A73456A11AC5AB9700152186 /* CoreDataStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataStack.m; sourceTree = "<group>"; };
+		A73456A21AC5AB9700152186 /* ManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManagedObject.h; sourceTree = "<group>"; };
+		A73456A31AC5AB9700152186 /* ManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ManagedObject.m; sourceTree = "<group>"; };
+		A73456A61AC5AE0000152186 /* CoreDataStack.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataStack.xcdatamodel; sourceTree = "<group>"; };
 		B9A681BDDE5F4C0DAD9637C4 /* Pods-SPLFormular.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SPLFormular.release.xcconfig"; path = "../Pods/Target Support Files/Pods-SPLFormular/Pods-SPLFormular.release.xcconfig"; sourceTree = "<group>"; };
 		C3032FD86818A8B8FAF2176F /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "../Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E7518EF271F61635E644639B /* SPLFormular.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SPLFormular.podspec; path = ../SPLFormular.podspec; sourceTree = "<group>"; };
@@ -141,6 +149,11 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				A73456A61AC5AE0000152186 /* CoreDataStack.xcdatamodel */,
+				A73456A01AC5AB9700152186 /* CoreDataStack.h */,
+				A73456A11AC5AB9700152186 /* CoreDataStack.m */,
+				A73456A21AC5AB9700152186 /* ManagedObject.h */,
+				A73456A31AC5AB9700152186 /* ManagedObject.m */,
 				6003F595195388D20070C39A /* SPLFormular-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
@@ -387,7 +400,10 @@
 			files = (
 				6003F59E195388D20070C39A /* SPLAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* SPLViewController.m in Sources */,
+				A73456A71AC5AE0000152186 /* CoreDataStack.xcdatamodel in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				A73456A41AC5AB9700152186 /* CoreDataStack.m in Sources */,
+				A73456A51AC5AB9700152186 /* ManagedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
