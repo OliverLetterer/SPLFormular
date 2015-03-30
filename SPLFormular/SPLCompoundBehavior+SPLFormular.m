@@ -80,7 +80,7 @@
 
     NSMutableArray *visibleSections = [NSMutableArray array];
     [self.formular.sections enumerateObjectsUsingBlock:^(SPLFormSection *section, NSUInteger sectionIndex, BOOL *stop) {
-        SPLSectionBehavior *sectionBehavior = self.behaviors[sectionIndex];
+        SPLSectionBehavior *sectionBehavior = self.childBehaviors[sectionIndex];
         NSMutableArray *visibleBehaviors = [NSMutableArray array];
 
         [section.fields enumerateObjectsUsingBlock:^(id<SPLFormField> field, NSUInteger fieldIndex, BOOL *stop) {

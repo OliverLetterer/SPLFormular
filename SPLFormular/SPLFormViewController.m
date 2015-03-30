@@ -197,19 +197,21 @@
 
 - (SPLCompoundBehavior *)_findFormularBehaviorInBehavior:(id<SPLTableViewBehavior>)behavior
 {
-    if (![behavior isKindOfClass:[SPLCompoundBehavior class]]) {
+    if (![behavior respondsToSelector:@selector(childBehaviors)]) {
         return nil;
     }
 
-    SPLCompoundBehavior *compoundBehavior = (SPLCompoundBehavior *)behavior;
-    if (compoundBehavior.formular == self.formular) {
-        return compoundBehavior;
-    } else {
-        for (id<SPLTableViewBehavior> nextBehavior in compoundBehavior.behaviors) {
-            SPLCompoundBehavior *result = [self _findFormularBehaviorInBehavior:nextBehavior];
-            if (result) {
-                return result;
-            }
+    if ([behavior isKindOfClass:[SPLCompoundBehavior class]]) {
+        SPLCompoundBehavior *compoundBehavior = (SPLCompoundBehavior *)behavior;
+        if (compoundBehavior.formular == self.formular) {
+            return compoundBehavior;
+        }
+    }
+
+    for (id<SPLTableViewBehavior> nextBehavior in behavior.childBehaviors) {
+        SPLCompoundBehavior *result = [self _findFormularBehaviorInBehavior:nextBehavior];
+        if (result) {
+            return result;
         }
     }
 
