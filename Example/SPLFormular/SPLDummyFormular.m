@@ -30,7 +30,7 @@
         return @[
                  [[SPLFormField alloc] initWithObject:object property:@selector(firstName) name:@"First name" type:SPLFormFieldTypeHumanText],
                  [[SPLFormField alloc] initWithObject:object property:@selector(lastName) name:@"Last name" type:SPLFormFieldTypeHumanText],
-                 //                     [[SPLFormField alloc] initWithProperty:@"date" title:NSLocalizedString(@"Date", @"") type:SPLFormFieldTypeDate],
+                 [[SPLFormField alloc] initWithObject:object property:@selector(date) name:@"Date" type:SPLFormFieldTypeDate],
                  ];
     }];
 

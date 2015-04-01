@@ -33,8 +33,8 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
     SPLFormFieldTypePrice,
     SPLFormFieldTypeIPAddress,
     SPLFormFieldTypeBoolean,
-//    SPLFormFieldTypeDate,
-//    SPLFormFieldTypeDateTime
+    SPLFormFieldTypeDate,
+    SPLFormFieldTypeDateTime
 };
 
 

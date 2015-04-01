@@ -27,11 +27,17 @@
 #import "SPLDefines.h"
 #import "RuntimeHelpers.h"
 
+#import "_SPLFormDatePickerViewController.h"
+
 static double doubleValue(NSString *text)
 {
     return [text stringByReplacingOccurrencesOfString:@"," withString:@"."].doubleValue;
 }
 
+
+@interface SPLFormField () <UIPopoverPresentationControllerDelegate>
+
+@end
 
 
 @implementation SPLFormField
@@ -72,12 +78,12 @@ static double doubleValue(NSString *text)
                     [NSException raise:NSInternalInconsistencyException format:@"%@[%@] must be NSNumber typed", [object class], _property];
                 }
                 break;
-//            case SPLFormFieldTypeDate:
-//            case SPLFormFieldTypeDateTime:
-//                if (propertyClass != [NSDate class]) {
-//                    [NSException raise:NSInternalInconsistencyException format:@"%@[%@] must be NSDate typed", [object class], _property];
-//                }
-//                break;
+            case SPLFormFieldTypeDate:
+            case SPLFormFieldTypeDateTime:
+                if (propertyClass != [NSDate class]) {
+                    [NSException raise:NSInternalInconsistencyException format:@"%@[%@] must be NSDate typed", [object class], _property];
+                }
+                break;
         }
     }
     return self;
@@ -91,6 +97,9 @@ static double doubleValue(NSString *text)
 
     objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
     Class propertyClass = property_getObjcClass(property);
+
+    SPLFormTableViewCell *plainCell = [[SPLFormTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"SPLFormTableViewCellValue1"];
+    plainCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     SPLFormSwitchCell *switchCell = [[SPLFormSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SPLFormSwitchCell"];
     switchCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -303,24 +312,46 @@ static double doubleValue(NSString *text)
 
             break;
         }
-//        case SPLFormFieldTypeDate:
-//        case SPLFormFieldTypeDateTime:{
-//            SPLFormTableViewCell *formCell = (SPLFormTableViewCell *)cell;
-//
-//            if (value) {
-//                if (self.type == SPLFormFieldTypeDate) {
-//                    formCell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-//                } else {
-//                    formCell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
-//                }
-//            } else {
-//                formCell.detailTextLabel.text = nil;
-//            }
-//            break;
-//        }
+        case SPLFormFieldTypeDate:
+        case SPLFormFieldTypeDateTime:{
+            _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:plainCell configuration:^(SPLFormTableViewCell *cell) {
+                __strongify(self);
+
+                id value = [self.object valueForKey:self.property];
+
+                cell.textLabel.text = self.name;
+
+                if (value) {
+                    if (self.type == SPLFormFieldTypeDate) {
+                        cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+                    } else {
+                        cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+                    }
+                } else {
+                    cell.detailTextLabel.text = nil;
+                }
+            } action:^(SPLFormSwitchCell *cell) {
+                __strongify(self);
+                [self _deselectTableViewCell:cell];
+
+                if (self.type == SPLFormFieldTypeDate) {
+                    [self _selectDateFromCell:cell inMode:UIDatePickerModeDate];
+                } else {
+                    [self _selectDateFromCell:cell inMode:UIDatePickerModeDateAndTime];
+                }
+            }];
+            break;
+        }
     }
 
     return _tableViewBehavior;
+}
+
+#pragma mark - UIPopoverPresentationControllerDelegate
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
+{
+    return UIModalPresentationNone;
 }
 
 #pragma mark - Private category implementation ()
@@ -352,10 +383,10 @@ static double doubleValue(NSString *text)
         case SPLFormFieldTypeBoolean:
             [self doesNotRecognizeSelector:_cmd];
             break;
-//        case SPLFormFieldTypeDate:
-//        case SPLFormFieldTypeDateTime:
-//            [self doesNotRecognizeSelector:_cmd];
-//            break;
+        case SPLFormFieldTypeDate:
+        case SPLFormFieldTypeDateTime:
+            [self doesNotRecognizeSelector:_cmd];
+            break;
     }
 }
 
@@ -363,6 +394,38 @@ static double doubleValue(NSString *text)
 {
     [self.object setValue:@(sender.isOn) forKey:self.property];
     self.changeObserver(self);
+}
+
+- (void)_selectDateFromCell:(SPLFormTableViewCell *)cell inMode:(UIDatePickerMode)mode
+{
+    UIResponder *responder = cell;
+    while (responder && ![responder isKindOfClass:[UIViewController class]]) {
+        responder = responder.nextResponder;
+    }
+
+    UIViewController *parentViewController = (UIViewController *)responder;
+
+    NSDate *value = [self.object valueForKey:self.property];
+    __weakify(self);
+    _SPLFormDatePickerViewController *viewController = [[_SPLFormDatePickerViewController alloc] initWithMode:mode date:value observer:^(NSDate *date) {
+        __strongify(self);
+
+        if (self.type == SPLFormFieldTypeDate) {
+            cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
+        } else {
+            cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+        }
+
+        [self.object setValue:date forKey:self.property];
+        self.changeObserver(self);
+    }];
+
+    viewController.modalPresentationStyle = UIModalPresentationPopover;
+    viewController.popoverPresentationController.sourceView = cell;
+    viewController.popoverPresentationController.sourceRect = cell.bounds;
+    viewController.popoverPresentationController.delegate = self;
+
+    [parentViewController presentViewController:viewController animated:YES completion:NULL];
 }
 
 - (void)_deselectTableViewCell:(UITableViewCell *)cell
