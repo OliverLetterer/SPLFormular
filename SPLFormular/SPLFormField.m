@@ -47,11 +47,17 @@ static double doubleValue(NSString *text)
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type
 {
+    return [self initWithObject:object property:property name:name placeholder:nil type:type];
+}
+
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder type:(SPLFormFieldType)type
+{
     if (self = [super init]) {
         _object = object;
         _property = NSStringFromSelector(property);
         _name = name;
         _type = type;
+        _placeholder = placeholder;
 
         objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
         Class propertyClass = property_getObjcClass(property);
@@ -79,7 +85,8 @@ static double doubleValue(NSString *text)
                 }
                 break;
             case SPLFormFieldTypeDate:
-            case SPLFormFieldTypeDateTime:
+            case SPLFormFieldTypeDateAndTime:
+            case SPLFormFieldTypeTime:
                 if (propertyClass != [NSDate class]) {
                     [NSException raise:NSInternalInconsistencyException format:@"%@[%@] must be NSDate typed", [object class], _property];
                 }
@@ -129,7 +136,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeYes;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -150,7 +157,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -171,7 +178,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -192,7 +199,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -213,7 +220,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeYes;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -239,7 +246,7 @@ static double doubleValue(NSString *text)
                 }
 
                 cell.textLabel.text = self.name;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -259,7 +266,7 @@ static double doubleValue(NSString *text)
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
-                cell.textField.text = value ? [NSString stringWithFormat:@"%0.02lf", [value doubleValue]] : nil;
+                cell.textField.text = value ? [NSString stringWithFormat:@"%0.02lf", [value doubleValue]] : self.placeholder;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -280,7 +287,7 @@ static double doubleValue(NSString *text)
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
-                cell.textField.text = value ? [NSString stringWithFormat:@"%@", value] : nil;
+                cell.textField.text = value ? [NSString stringWithFormat:@"%@", value] : self.placeholder;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -313,7 +320,8 @@ static double doubleValue(NSString *text)
             break;
         }
         case SPLFormFieldTypeDate:
-        case SPLFormFieldTypeDateTime:{
+        case SPLFormFieldTypeTime:
+        case SPLFormFieldTypeDateAndTime:{
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:plainCell configuration:^(SPLFormTableViewCell *cell) {
                 __strongify(self);
 
@@ -324,11 +332,13 @@ static double doubleValue(NSString *text)
                 if (value) {
                     if (self.type == SPLFormFieldTypeDate) {
                         cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-                    } else {
+                    } else if (self.type == SPLFormFieldTypeTime) {
+                        cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+                    } else if (self.type == SPLFormFieldTypeDateAndTime) {
                         cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:value dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
                     }
                 } else {
-                    cell.detailTextLabel.text = nil;
+                    cell.detailTextLabel.text = self.placeholder;
                 }
             } action:^(SPLFormSwitchCell *cell) {
                 __strongify(self);
@@ -336,7 +346,9 @@ static double doubleValue(NSString *text)
 
                 if (self.type == SPLFormFieldTypeDate) {
                     [self _selectDateFromCell:cell inMode:UIDatePickerModeDate];
-                } else {
+                } else if (self.type == SPLFormFieldTypeTime) {
+                    [self _selectDateFromCell:cell inMode:UIDatePickerModeTime];
+                } else if (self.type == SPLFormFieldTypeDateAndTime) {
                     [self _selectDateFromCell:cell inMode:UIDatePickerModeDateAndTime];
                 }
             }];
@@ -384,7 +396,8 @@ static double doubleValue(NSString *text)
             [self doesNotRecognizeSelector:_cmd];
             break;
         case SPLFormFieldTypeDate:
-        case SPLFormFieldTypeDateTime:
+        case SPLFormFieldTypeTime:
+        case SPLFormFieldTypeDateAndTime:
             [self doesNotRecognizeSelector:_cmd];
             break;
     }
@@ -405,14 +418,15 @@ static double doubleValue(NSString *text)
 
     UIViewController *parentViewController = (UIViewController *)responder;
 
-    NSDate *value = [self.object valueForKey:self.property];
     __weakify(self);
-    _SPLFormDatePickerViewController *viewController = [[_SPLFormDatePickerViewController alloc] initWithMode:mode date:value observer:^(NSDate *date) {
+    _SPLFormDatePickerViewController *viewController = [[_SPLFormDatePickerViewController alloc] initWithMode:mode date:[self.object valueForKey:self.property] observer:^(NSDate *date) {
         __strongify(self);
 
         if (self.type == SPLFormFieldTypeDate) {
             cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterNoStyle];
-        } else {
+        } else if (self.type == SPLFormFieldTypeTime) {
+            cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+        } else if (self.type == SPLFormFieldTypeDateAndTime) {
             cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
         }
 

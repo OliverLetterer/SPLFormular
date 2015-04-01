@@ -34,7 +34,8 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
     SPLFormFieldTypeIPAddress,
     SPLFormFieldTypeBoolean,
     SPLFormFieldTypeDate,
-    SPLFormFieldTypeDateTime
+    SPLFormFieldTypeTime,
+    SPLFormFieldTypeDateAndTime
 };
 
 
@@ -49,12 +50,15 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, readonly) SPLFormFieldType type;
 
+@property (nonatomic, readonly) NSString *placeholder;
+
 @property (nonatomic, readonly) id<SPLTableViewBehavior> tableViewBehavior;
 @property (nonatomic, unsafe_unretained, readonly) id object;
 
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type;
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder type:(SPLFormFieldType)type NS_DESIGNATED_INITIALIZER;
 
 @end

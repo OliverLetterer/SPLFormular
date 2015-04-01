@@ -11,12 +11,6 @@
 
 
 
-@interface SPLDummyFormular ()
-
-@end
-
-
-
 @implementation SPLDummyFormular
 
 - (instancetype)initWithObject:(id)object sections:(NSArray *)sections predicates:(NSDictionary *)predicates
@@ -30,7 +24,7 @@
         return @[
                  [[SPLFormField alloc] initWithObject:object property:@selector(firstName) name:@"First name" type:SPLFormFieldTypeHumanText],
                  [[SPLFormField alloc] initWithObject:object property:@selector(lastName) name:@"Last name" type:SPLFormFieldTypeHumanText],
-                 [[SPLFormField alloc] initWithObject:object property:@selector(date) name:@"Date" type:SPLFormFieldTypeDate],
+                 [[SPLFormField alloc] initWithObject:object property:@selector(date) name:@"Date" placeholder:@"Select date" type:SPLFormFieldTypeTime],
                  ];
     }];
 
