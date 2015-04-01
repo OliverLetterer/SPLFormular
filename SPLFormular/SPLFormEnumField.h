@@ -23,6 +23,25 @@
 #import <Foundation/Foundation.h>
 #import <SPLFormular/SPLFormFieldProtocol.h>
 
+@interface SPLEnumFormatter : NSFormatter
+
+@property (nonatomic, copy, readonly) NSString *(^format)(id object);
+
+@property (nonatomic, readonly) NSArray *options;
+@property (nonatomic, readonly) NSArray *values;
+
+@property (nonatomic, readonly) NSString *placeholder;
+
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options;
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder;
+
+- (instancetype)initWithValues:(NSArray *)values format:(NSString *(^)(id object))format;
+- (instancetype)initWithValues:(NSArray *)values placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format;
+
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format NS_DESIGNATED_INITIALIZER;
+
+@end
+
 
 
 /**
@@ -40,11 +59,13 @@
 
 @property (nonatomic, strong) NSArray *additionalRightBarButtonItems;
 
-@property (nonatomic, copy, readonly) NSArray *options;
-@property (nonatomic, copy, readonly) NSArray *values;
+@property (nonatomic, readonly) SPLEnumFormatter *formatter;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name keyPath:(NSString *)keyPath fromValues:(NSArray *)values;
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name humanReadableOptions:(NSArray *)options values:(NSArray *)values NS_DESIGNATED_INITIALIZER;
+
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name keyPath:(NSString *)keyPath fromValues:(NSArray *)values DEPRECATED_ATTRIBUTE;
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name humanReadableOptions:(NSArray *)options values:(NSArray *)values DEPRECATED_ATTRIBUTE;
+
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter NS_DESIGNATED_INITIALIZER;
 
 @end

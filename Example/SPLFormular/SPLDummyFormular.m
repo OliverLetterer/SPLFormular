@@ -58,10 +58,12 @@
     NSArray *options = @[ @"First option", @"Second option", @"Third option" ];
     NSArray *values = @[ @"First value", @"Second value", @"Third value" ];
 
+    SPLEnumFormatter *formatter = [[SPLEnumFormatter alloc] initWithValues:values options:options placeholder:@"Keine Ahnung"];
+
     SPLFormSection *section3 = [[SPLFormSection alloc] initWithName:@"ENUMS" fields:^NSArray *{
         return @[
-                 [[SPLFormEnumField alloc] initWithObject:object property:@selector(hearedAboutUsFrom) name:@"Von wo kennst du uns?" humanReadableOptions:options values:values],
-                 [[SPLFormEnumField alloc] initWithObject:object property:@selector(multipleSelection) name:@"Mehrfachauswahl" humanReadableOptions:options values:values],
+                 [[SPLFormEnumField alloc] initWithObject:object property:@selector(hearedAboutUsFrom) name:@"Von wo kennst du uns?" formatter:formatter],
+                 [[SPLFormEnumField alloc] initWithObject:object property:@selector(multipleSelection) name:@"Mehrfachauswahl" formatter:formatter],
                  ];
     }];
 

@@ -26,6 +26,70 @@
 #import "RuntimeHelpers.h"
 #import "_SPLSelectEnumValuesViewController.h"
 
+@implementation SPLEnumFormatter
+
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options
+{
+    return [self initWithValues:values options:options placeholder:nil format:nil];
+}
+
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder
+{
+    return [self initWithValues:values options:options placeholder:placeholder format:nil];
+}
+
+- (instancetype)initWithValues:(NSArray *)values format:(NSString *(^)(id object))format
+{
+    NSMutableArray *options = [NSMutableArray array];
+    for (id object in values) {
+        [options addObject:format(object)];
+    }
+
+    return [self initWithValues:values options:options placeholder:nil format:format];
+}
+
+- (instancetype)initWithValues:(NSArray *)values placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format
+{
+    NSMutableArray *options = [NSMutableArray array];
+    for (id object in values) {
+        [options addObject:format(object)];
+    }
+
+    return [self initWithValues:values options:options placeholder:placeholder format:format];
+}
+
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format
+{
+    NSParameterAssert(values.count == options.count);
+
+    if (self = [super init]) {
+        _values = values;
+        _options = options;
+        _placeholder = placeholder;
+        _format = format;
+    }
+    return self;
+}
+
+- (NSString *)stringForObjectValue:(id)obj
+{
+    if (obj == nil) {
+        return self.placeholder ?: @"";
+    }
+    
+    NSInteger index = [self.values indexOfObject:obj];
+
+    if (index != NSNotFound) {
+        return self.options[index];
+    } else if (self.format) {
+        return self.format(obj);
+    } else {
+        return @"";
+    }
+}
+
+@end
+
 @interface SPLFormEnumField () <_SPLSelectEnumValuesViewControllerDelegate>
 
 @end
@@ -34,6 +98,20 @@
 
 @implementation SPLFormEnumField
 @synthesize tableViewBehavior = _tableViewBehavior;
+
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter
+{
+    if (self = [super init]) {
+        _object = object;
+        _property = NSStringFromSelector(property);
+        _name = name;
+
+        _formatter = formatter;
+
+        [self _checkConsistency];
+    }
+    return self;
+}
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name keyPath:(NSString *)keyPath fromValues:(NSArray *)values
 {
@@ -49,17 +127,8 @@
         }
     }
 
-    if (self = [super init]) {
-        _object = object;
-        _property = NSStringFromSelector(property);
-        _name = name;
-
-        _options = options.copy;
-        _values = values.copy;
-
-        [self _checkConsistency];
-    }
-    return self;
+    SPLEnumFormatter *formatter = [[SPLEnumFormatter alloc] initWithValues:values options:options];
+    return [self initWithObject:object property:property name:name formatter:formatter];
 }
 
 - (id<SPLTableViewBehavior>)tableViewBehavior
@@ -88,14 +157,7 @@
 //        } else if ((self.values.count == 0 && self.downloadBlock) || (value == nil)) {
 //            cell.detailTextLabel.text = self.placeholder;
         } else {
-            id value = [self.object valueForKey:self.property];
-            NSInteger index = [self.values indexOfObject:value];
-
-            if (index != NSNotFound) {
-                cell.detailTextLabel.text = self.options[index];
-            } else {
-                cell.detailTextLabel.text = @"";
-            }
+            cell.detailTextLabel.text = [self.formatter stringForObjectValue:value];
         }
     } action:^(SPLFormTableViewCell *cell) {
         __strongify(self);
@@ -120,7 +182,7 @@
 
 - (void)_showEnumViewControllerFromCell:(UITableViewCell *)cell
 {
-    _SPLSelectEnumValuesViewController *viewController = [[_SPLSelectEnumValuesViewController alloc] initWithField:self humanReadableOptions:self.options values:self.values];
+    _SPLSelectEnumValuesViewController *viewController = [[_SPLSelectEnumValuesViewController alloc] initWithField:self humanReadableOptions:self.formatter.options values:self.formatter.values];
     viewController.delegate = self;
     viewController.additionalRightBarButtonItems = self.additionalRightBarButtonItems;
 
@@ -141,7 +203,7 @@
         return;
     }
 
-    for (id value in self.values) {
+    for (id value in self.formatter.values) {
         if (![value isKindOfClass:propertyClass]) {
             [NSException raise:NSInternalInconsistencyException format:@"Value %@ should be of class %@", value, propertyClass];
         }
