@@ -13,11 +13,6 @@
 
 @implementation SPLDummyFormular
 
-- (instancetype)initWithObject:(id)object sections:(NSArray *)sections predicates:(NSDictionary *)predicates
-{
-    return [self initWithObject:object];
-}
-
 - (instancetype)initWithObject:(TestObject *)object
 {
     SPLFormSection *section0 = [[SPLFormSection alloc] initWithName:@"Contact" fields:^NSArray *{
@@ -25,6 +20,7 @@
                  [[SPLFormField alloc] initWithObject:object property:@selector(firstName) name:@"First name" type:SPLFormFieldTypeHumanText],
                  [[SPLFormField alloc] initWithObject:object property:@selector(lastName) name:@"Last name" type:SPLFormFieldTypeHumanText],
                  [[SPLFormField alloc] initWithObject:object property:@selector(date) name:@"Date" placeholder:@"Select date" type:SPLFormFieldTypeTime],
+                 [[SPLFormField alloc] initWithObject:object property:@selector(ipAddress) name:@"IP" type:SPLFormFieldTypeIPAddress],
                  ];
     }];
 
@@ -74,7 +70,7 @@
                                  @"passwordConfirmation": [NSPredicate predicateWithFormat:@"password.length > 0"],
                                  };
 
-    return [super initWithObject:object sections:@[ section0, section1, section2, section3 ] predicates:predicates];
+    return [self initWithObject:object sections:@[ section0, section1, section2, section3 ] predicates:predicates];
 }
 
 @end

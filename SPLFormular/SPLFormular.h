@@ -25,6 +25,8 @@
 
 #import <SPLTableViewBehavior/SPLTableViewBehavior.h>
 
+#import <SPLFormular/SPLFormValidator.h>
+
 #import <SPLFormular/SPLFormField.h>
 #import <SPLFormular/SPLFormEnumField.h>
 #import <SPLFormular/SPLFormFieldProtocol.h>
@@ -51,6 +53,11 @@
 @property (nonatomic, copy, readonly) NSDictionary *predicates;
 
 - (SPLFormSection *)objectAtIndexedSubscript:(NSUInteger)idx;
+
+- (id<SPLFormValidator>)validateAllFields;
+- (id<SPLFormValidator>)validateRequiredKeys:(NSArray *)requiredKeys;
+- (id<SPLFormValidator>)validateEqualValuesForKeys:(NSArray *)equalKeys error:(NSString *)error;
+- (id<SPLFormValidator>)validateOrderedValuesForKeys:(NSArray *)orderedKeys ascending:(BOOL)ascending error:(NSString *)error;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections;

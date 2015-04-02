@@ -74,6 +74,20 @@
     return self;
 }
 
+- (NSIndexPath *)convertIndexPathFromVisibleField:(id<SPLFormField>)field
+{
+    for (SPLSectionBehavior *section in self.visibleBehaviors) {
+        for (id<SPLTableViewBehavior> behavior in section.visibleBehaviors) {
+            if (field.tableViewBehavior == behavior) {
+                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                return [behavior.update convertIndexPath:indexPath fromChildBehavior:behavior];
+            }
+        }
+    }
+
+    return nil;
+}
+
 - (void)_objectDidChange
 {
     [self.update tableViewBehaviorBeginUpdates:self];

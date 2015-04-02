@@ -24,6 +24,7 @@
 #import <SPLTableViewBehavior/SPLTableViewBehavior.h>
 
 @class SPLFormular;
+@protocol SPLFormField;
 
 
 
@@ -38,6 +39,9 @@
 @property (nonatomic, strong) UIBarButtonItem *cancelBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *saveBarButtonItem;
 @property (nonatomic, readonly) UIBarButtonItem *activityIndicatorBarButtonItem;
+
+@property (nonatomic, strong) NSArray *validations;
+- (BOOL)validateForm:(id<SPLFormField> *)failingField error:(NSString **)error;
 
 - (void)saveWithCompletionHandler:(void(^)(NSError *error))completionHandler;
 

@@ -35,4 +35,7 @@
 
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 
+@optional
+- (BOOL)validateObjectValue;
+
 @end

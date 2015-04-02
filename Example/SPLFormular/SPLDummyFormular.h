@@ -16,6 +16,7 @@
 @property (nonatomic, readonly) NSString *password;
 @property (nonatomic, readonly) NSString *passwordConfirmation;
 @property (nonatomic, readonly) NSDate *date;
+@property (nonatomic, readonly) NSString *ipAddress;
 
 @property (nonatomic, readonly) NSNumber *hasHomepage;
 @property (nonatomic, readonly) NSString *homepage;
@@ -40,6 +41,6 @@
  */
 @interface SPLDummyFormular : SPLFormular
 
-- (instancetype)initWithObject:(TestObject *)object NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithObject:(TestObject *)object;
 
 @end

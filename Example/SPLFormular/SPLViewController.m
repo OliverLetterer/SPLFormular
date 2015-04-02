@@ -54,6 +54,11 @@
 
     if (self = [super initWithStyle:UITableViewStylePlain formular:formular behavior:tableViewBehavior]) {
         [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_deleteRandomObjects) userInfo:nil repeats:YES];
+
+        self.validations = @[
+                             [self.formular validateRequiredKeys:@[ NSStringFromSelector(@selector(password)), NSStringFromSelector(@selector(passwordConfirmation)) ]],
+                             [self.formular validateEqualValuesForKeys:@[ NSStringFromSelector(@selector(password)), NSStringFromSelector(@selector(passwordConfirmation)) ] error:@"Passwords did not match"],
+                             ];
     }
     return self;
 }

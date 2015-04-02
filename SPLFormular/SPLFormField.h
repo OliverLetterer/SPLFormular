@@ -40,7 +40,6 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 
 
 
-
 /**
  @abstract  <#abstract comment#>
  */

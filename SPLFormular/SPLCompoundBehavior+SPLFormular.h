@@ -24,6 +24,9 @@
 #import <SPLTableViewBehavior/SPLTableViewBehavior.h>
 
 @class SPLFormular;
+@protocol SPLFormField;
+
+
 
 @interface SPLCompoundBehavior (SPLFormular)
 
@@ -31,5 +34,7 @@
 @property (nonatomic, copy) dispatch_block_t formularChangeObserver;
 
 - (instancetype)initWithFormular:(SPLFormular *)formular;
+
+- (NSIndexPath *)convertIndexPathFromVisibleField:(id<SPLFormField>)field;
 
 @end

@@ -24,6 +24,8 @@
 #import "SPLFormular.h"
 #import "SPLDefines.h"
 
+#import <objc/runtime.h>
+
 
 
 @interface SPLFormViewController ()
@@ -127,6 +129,78 @@
     [self doesNotRecognizeSelector:_cmd];
 }
 
+- (BOOL)validateForm:(id<SPLFormField> *)failingField error:(NSString **)error
+{
+    id<SPLFormField> localFailingField = nil;
+    NSString *localError = nil;
+
+    for (id<SPLFormValidator> validation in self.validations) {
+        if (![validation validateForm:self.formular failingField:&localFailingField error:&localError]) {
+            if (failingField) {
+                *failingField = localFailingField;
+            }
+            if (error) {
+                *error = localError;
+            }
+
+            void(^displayErrorAlert)(NSString *error) = ^(NSString *error) {
+                if (error) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Validation failed", @"")
+                                                                    message:localError
+                                                                   delegate:nil
+                                                          cancelButtonTitle:NSLocalizedString(@"OK", @"")
+                                                          otherButtonTitles:nil];
+                    
+                    [alert show];
+                }
+            };
+
+            if (localFailingField) {
+                NSIndexPath *indexPath = [self.formBehavior convertIndexPathFromVisibleField:localFailingField];
+                NSLog(@"%@ %@[%@] validation failed at %@ because '%@'", self, object_getClass(self.formular.object), localFailingField.property, indexPath, localError);
+
+                if (indexPath) {
+                    void(^nowShake)(void) = ^{
+                        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+                        [self _errorShakeOnView:cell withCompletionHandler:^{
+                            UITextField *textField = [self _findTextFieldInView:cell];
+
+                            if (textField) {
+                                [textField becomeFirstResponder];
+                            }
+
+                            displayErrorAlert(localError);
+                        }];
+                    };
+
+                    if (![self.tableView.indexPathsForVisibleRows containsObject:indexPath]) {
+                        [CATransaction begin];
+                        [CATransaction setCompletionBlock:nowShake];
+
+                        [self.tableView beginUpdates];
+                        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+                        [self.tableView endUpdates];
+
+                        [CATransaction commit];
+                    } else {
+                        nowShake();
+                    }
+                }
+            } else if (localError) {
+                NSLog(@"%@ validation failed because '%@'", self, localError);
+                displayErrorAlert(localError);
+            } else {
+                NSLog(@"%@ validation failed for unkown reasong", self);
+                displayErrorAlert(NSLocalizedString(@"Unkown reason", @""));
+            }
+
+            return NO;
+        }
+    }
+
+    return YES;
+}
+
 #pragma mark - Private category implementation ()
 
 - (void)_updateCancelBarButtonItem
@@ -160,9 +234,9 @@
 {
     [[UIApplication sharedApplication] sendAction:@selector(resignFirstResponder) to:nil from:nil forEvent:nil];
 
-//    if (![self validate:NULL]) {
-//        return;
-//    }
+    if (![self validateForm:NULL error:NULL]) {
+        return;
+    }
 
     UIBarButtonItem *previousBarButtonItem = self.navigationItem.rightBarButtonItem;
     self.navigationItem.rightBarButtonItem = self.activityIndicatorBarButtonItem;
@@ -216,6 +290,55 @@
     }
 
     return nil;
+}
+
+- (UITextField *)_findTextFieldInView:(UIView *)view
+{
+    for (UIView *subview in view.subviews) {
+        UITextField *textField = nil;
+        if ([subview isKindOfClass:[UITextField class]]) {
+            textField = (UITextField *)subview;
+        } else {
+            textField = [self _findTextFieldInView:subview];
+        }
+
+        if (textField) {
+            return textField;
+        }
+    }
+
+    return nil;
+}
+
+- (void)_errorShakeOnView:(UIView *)view withCompletionHandler:(dispatch_block_t)completionHandler
+{
+    static CGFloat intensity = 60.0;
+
+    [UIView animateKeyframesWithDuration:0.4 delay:0.0 options:UIViewKeyframeAnimationOptionCalculationModePaced animations:^{
+        [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:0.2 animations:^{
+            view.transform = CGAffineTransformMakeTranslation(-intensity, 0.0);
+        }];
+
+        [UIView addKeyframeWithRelativeStartTime:0.2 relativeDuration:0.2 animations:^{
+            view.transform = CGAffineTransformMakeTranslation(intensity, 0.0);
+        }];
+
+        [UIView addKeyframeWithRelativeStartTime:0.4 relativeDuration:0.2 animations:^{
+            view.transform = CGAffineTransformMakeTranslation(-intensity, 0.0);
+        }];
+
+        [UIView addKeyframeWithRelativeStartTime:0.6 relativeDuration:0.2 animations:^{
+            view.transform = CGAffineTransformMakeTranslation(intensity, 0.0);
+        }];
+
+        [UIView addKeyframeWithRelativeStartTime:0.8 relativeDuration:0.2 animations:^{
+            view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
+        }];
+    } completion:^(BOOL finished) {
+        if (completionHandler) {
+            completionHandler();
+        }
+    }];
 }
 
 @end

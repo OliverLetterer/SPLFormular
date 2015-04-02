@@ -96,6 +96,49 @@ static double doubleValue(NSString *text)
     return self;
 }
 
+- (BOOL)validateObjectValue
+{
+    id value = [self.object valueForKey:self.property];
+
+    if (!value) {
+        return YES;
+    }
+
+    BOOL(^matches)(NSString *value, NSString *regex) = ^BOOL(NSString *value, NSString *regex) {
+        if (!value || ![value isKindOfClass:[NSString class]]) {
+            return NO;
+        }
+
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+        return [predicate evaluateWithObject:value];
+    };
+
+    switch (self.type) {
+        case SPLFormFieldTypeHumanText:
+        case SPLFormFieldTypeMachineText:
+        case SPLFormFieldTypePassword:
+        case SPLFormFieldTypeNumber:
+        case SPLFormFieldTypePrice:
+        case SPLFormFieldTypeBoolean:
+        case SPLFormFieldTypeDate:
+        case SPLFormFieldTypeTime:
+        case SPLFormFieldTypeDateAndTime:
+            return YES;
+            break;
+        case SPLFormFieldTypeEMail:
+            return matches(value, @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+            break;
+        case SPLFormFieldTypeURL:
+            return [NSURL URLWithString:value] != nil;
+            break;
+        case SPLFormFieldTypeIPAddress:
+            return matches(value, @"\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}");
+            break;
+    }
+
+    return YES;
+}
+
 - (id<SPLTableViewBehavior>)tableViewBehavior
 {
     if (_tableViewBehavior) {
@@ -105,13 +148,13 @@ static double doubleValue(NSString *text)
     objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
     Class propertyClass = property_getObjcClass(property);
 
-    SPLFormTableViewCell *plainCell = [[SPLFormTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"SPLFormTableViewCellValue1"];
+    SPLFormTableViewCell *plainCell = [[SPLFormTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"SPLFormFieldSPLFormTableViewCellValue1"];
     plainCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    SPLFormSwitchCell *switchCell = [[SPLFormSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SPLFormSwitchCell"];
+    SPLFormSwitchCell *switchCell = [[SPLFormSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SPLFormFieldSPLFormSwitchCell"];
     switchCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    SPLFormTextFieldCell *textFieldCell = [[SPLFormTextFieldCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SPLFormTextFieldCell"];
+    SPLFormTextFieldCell *textFieldCell = [[SPLFormTextFieldCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SPLFormFieldSPLFormTextFieldCell"];
     textFieldCell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     __weakify(self);
@@ -123,15 +166,35 @@ static double doubleValue(NSString *text)
         [cell.textField becomeFirstResponder];
     };
 
+    void(^setupTextFieldTargets)(UITextField *textField) = ^(UITextField *textField) {
+        __strongify(self);
+
+        for (id target in textField.allTargets) {
+            for (NSString *action in [textField actionsForTarget:target forControlEvent:UIControlEventEditingChanged]) {
+                [textField removeTarget:target action:NSSelectorFromString(action) forControlEvents:UIControlEventEditingChanged];
+            }
+        }
+        [textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+    };
+
+    void(^setupSwitchTargets)(UISwitch *textField) = ^(UISwitch *switchControl) {
+        __strongify(self);
+
+        for (id target in switchControl.allTargets) {
+            for (NSString *action in [switchControl actionsForTarget:target forControlEvent:UIControlEventEditingChanged]) {
+                [switchControl removeTarget:target action:NSSelectorFromString(action) forControlEvents:UIControlEventEditingChanged];
+            }
+        }
+
+        [switchControl addTarget:self action:@selector(_switchChanged:) forControlEvents:UIControlEventValueChanged];
+    };
+
     switch (self.type) {
         case SPLFormFieldTypeHumanText: {
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -149,10 +212,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -170,10 +230,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -191,10 +248,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -212,10 +266,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -233,10 +284,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 if (propertyClass == [NSNumber class]) {
@@ -259,10 +307,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -280,14 +325,11 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                if (![cell.textField.allTargets containsObject:self]) {
-                    [cell.textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-                }
-
+                setupTextFieldTargets(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
-                cell.textField.text = value ? [NSString stringWithFormat:@"%@", value] : self.placeholder;
+                cell.textField.text = value ?: self.placeholder;
                 cell.textField.placeholder = cell.textLabel.text;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -301,10 +343,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:switchCell configuration:^(SPLFormSwitchCell *cell) {
                 __strongify(self);
 
-                if (![cell.switchControl.allTargets containsObject:self]) {
-                    [cell.switchControl addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventValueChanged];
-                }
-
+                setupSwitchTargets(cell.switchControl);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -370,6 +409,8 @@ static double doubleValue(NSString *text)
 
 - (void)_textFieldEditingChanged:(UITextField *)textField
 {
+    NSString *text = textField.text.length == 0 ? nil : textField.text;
+
     objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
     Class propertyClass = property_getObjcClass(property);
 
@@ -380,15 +421,15 @@ static double doubleValue(NSString *text)
         case SPLFormFieldTypePassword:
         case SPLFormFieldTypeURL:
         case SPLFormFieldTypeIPAddress:
-            [self.object setValue:textField.text forKey:self.property];
+            [self.object setValue:text forKey:self.property];
             self.changeObserver(self);
             break;
         case SPLFormFieldTypeNumber:
         case SPLFormFieldTypePrice:
             if (propertyClass == [NSNumber class]) {
-                [self.object setValue:@(doubleValue(textField.text)) forKey:self.property];
+                [self.object setValue:@(doubleValue(text)) forKey:self.property];
             } else {
-                [self.object setValue:textField.text forKey:self.property];
+                [self.object setValue:text forKey:self.property];
             }
             self.changeObserver(self);
             break;

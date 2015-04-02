@@ -71,4 +71,180 @@
     return [self.sections countByEnumeratingWithState:state objects:buffer count:len];
 }
 
+- (id<SPLFormValidator>)validateAllFields
+{
+    return [[SPLFormValidator alloc] initWithBlock:^BOOL(SPLFormular *formular, __autoreleasing id<SPLFormField> *failingField, NSString *__autoreleasing *error) {
+        for (id<SPLFormField> field in [formular _visibleFields]) {
+            if ([field respondsToSelector:@selector(validateObjectValue)] && ![field validateObjectValue]) {
+                if (failingField) {
+                    *failingField = field;
+                }
+                return NO;
+            }
+
+            if (![formular.object valueForKey:field.property]) {
+                if (failingField) {
+                    *failingField = field;
+                }
+                return NO;
+            }
+        }
+        
+        return YES;
+    }];
+}
+
+- (id<SPLFormValidator>)validateRequiredKeys:(NSArray *)requiredKeys
+{
+    NSParameterAssert(requiredKeys.count > 0);
+
+    for (NSString *key in requiredKeys) {
+        objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
+        NSAssert(property != NULL, @"property %@[%@] not found", object_getClass(self.object), key);
+    }
+
+    return [[SPLFormValidator alloc] initWithBlock:^BOOL(SPLFormular *formular, __autoreleasing id<SPLFormField> *failingField, NSString *__autoreleasing *error) {
+        for (id<SPLFormField> field in [formular _visibleFields]) {
+            if ([field respondsToSelector:@selector(validateObjectValue)] && ![field validateObjectValue]) {
+                if (failingField) {
+                    *failingField = field;
+                }
+                return NO;
+            }
+
+            if (![requiredKeys containsObject:field.property]) {
+                continue;
+            }
+            
+            if (![formular.object valueForKey:field.property]) {
+                if (failingField) {
+                    *failingField = field;
+                }
+                return NO;
+            }
+        }
+
+        return YES;
+    }];
+}
+
+- (id<SPLFormValidator>)validateEqualValuesForKeys:(NSArray *)equalKeys error:(NSString *)errorString
+{
+    NSParameterAssert(equalKeys.count > 0);
+
+    for (NSString *key in equalKeys) {
+        objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
+        NSAssert(property != NULL, @"property %@[%@] not found", object_getClass(self.object), key);
+    }
+
+    return [[SPLFormValidator alloc] initWithBlock:^BOOL(SPLFormular *formular, __autoreleasing id<SPLFormField> *failingField, NSString *__autoreleasing *error) {
+        id expectedValue = nil;
+
+        for (id<SPLFormField> field in [formular _visibleFields]) {
+            if ([field respondsToSelector:@selector(validateObjectValue)] && ![field validateObjectValue]) {
+                if (failingField) {
+                    *failingField = field;
+                }
+                return NO;
+            }
+
+            if (![equalKeys containsObject:field.property]) {
+                continue;
+            }
+
+            id currentValue = [formular.object valueForKey:field.property];
+
+            if (!expectedValue) {
+                expectedValue = currentValue;
+            }
+
+            if (![expectedValue isEqual:currentValue]) {
+                if (failingField) {
+                    *failingField = field;
+                }
+                if (error) {
+                    *error = errorString;
+                }
+                return NO;
+            }
+        }
+        
+        return YES;
+    }];
+}
+
+- (id<SPLFormValidator>)validateOrderedValuesForKeys:(NSArray *)orderedKeys ascending:(BOOL)ascending error:(NSString *)errorString
+{
+    NSParameterAssert(orderedKeys.count > 0);
+
+    for (NSString *key in orderedKeys) {
+        objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
+        NSAssert(property != NULL, @"property %@[%@] not found", object_getClass(self.object), key);
+    }
+
+    return [[SPLFormValidator alloc] initWithBlock:^BOOL(SPLFormular *formular, __autoreleasing id<SPLFormField> *failingField, NSString *__autoreleasing *error) {
+        NSMutableArray *values = [NSMutableArray array];
+        NSDictionary *fieldsByProperty = [self _fieldsByProperty];
+
+        for (NSString *key in orderedKeys) {
+            id currentValue = [formular.object valueForKey:key];
+
+            if (!currentValue) {
+                if (failingField) {
+                    *failingField = fieldsByProperty[key];
+                }
+                return NO;
+            }
+
+            [values addObject:currentValue];
+        }
+
+        NSArray *sortedValues = [values sortedArrayUsingSelector:@selector(compare:)];
+        if (!ascending) {
+            sortedValues = sortedValues.reverseObjectEnumerator.allObjects;
+        }
+
+        if (![values isEqualToArray:sortedValues]) {
+            if (error) {
+                *error = errorString;
+            }
+            return NO;
+        }
+        
+        return YES;
+    }];
+}
+
+- (NSDictionary *)_fieldsByProperty
+{
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+
+    for (SPLFormSection *section in self) {
+        for (id<SPLFormField> field in section) {
+            result[field.property] = field;
+        }
+    }
+    
+    return result;
+}
+
+- (NSArray *)_visibleFields
+{
+    NSMutableArray *result = [NSMutableArray array];
+
+    for (SPLFormSection *section in self) {
+        for (id<SPLFormField> field in section) {
+            NSPredicate *predicate = self.predicates[field.property];
+
+            if (predicate && ![predicate evaluateWithObject:self.object]) {
+                continue;
+            }
+
+            [result addObject:field];
+        }
+    }
+
+    return result;
+}
+
 @end
