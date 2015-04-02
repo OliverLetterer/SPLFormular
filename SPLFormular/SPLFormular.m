@@ -99,7 +99,7 @@
     NSParameterAssert(requiredKeys.count > 0);
 
     for (NSString *key in requiredKeys) {
-        objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
+        __assert_unused objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
         NSAssert(property != NULL, @"property %@[%@] not found", object_getClass(self.object), key);
     }
 
@@ -133,7 +133,7 @@
     NSParameterAssert(equalKeys.count > 0);
 
     for (NSString *key in equalKeys) {
-        objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
+        __assert_unused objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
         NSAssert(property != NULL, @"property %@[%@] not found", object_getClass(self.object), key);
     }
 
@@ -178,7 +178,7 @@
     NSParameterAssert(orderedKeys.count > 0);
 
     for (NSString *key in orderedKeys) {
-        objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
+        __assert_unused objc_property_t property = class_getProperty(object_getClass(self.object), key.UTF8String);
         NSAssert(property != NULL, @"property %@[%@] not found", object_getClass(self.object), key);
     }
 
