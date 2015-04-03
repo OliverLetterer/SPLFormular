@@ -44,17 +44,15 @@
         return _tableViewBehavior;
     }
 
-    SPLFormTableViewCell *prototype = [[SPLFormTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"SPLFormInlineEnumFieldSPLFormTableViewCell"];
+    SPLFormTableViewCell *prototype = [[SPLFormTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SPLFormInlineEnumFieldSPLFormTableViewCell"];
     prototype.selectionStyle = UITableViewCellSelectionStyleBlue;
 
     __weakify(self);
     _tableViewBehavior = [[SPLArrayBehavior alloc] initWithPrototype:prototype data:self.formatter.values configuration:^(SPLFormTableViewCell *cell, id cellValue) {
         __strongify(self);
 
-        cell.textLabel.text = self.name;
-        cell.detailTextLabel.text = [self.formatter stringForObjectValue:cellValue];
-
         id currentValue = [self.object valueForKey:self.property];
+        cell.textLabel.text = [self.formatter stringForObjectValue:cellValue];
         cell.accessoryType = currentValue == cellValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     } action:^(id object) {
         __strongify(self);

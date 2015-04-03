@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "SPLFormular"
-  s.version          = "0.6.0"
+  s.version          = "0.6.1"
   s.summary          = "Simply dynamic formulars, backed by SPLTableViewBehavior."
   s.homepage         = "https://github.com/OliverLetterer/SPLFormular"
   s.license          = 'MIT'
@@ -25,5 +25,5 @@ Pod::Spec.new do |s|
   s.prefix_header_contents = '#ifndef NS_BLOCK_ASSERTIONS', '#define __assert_unused', '#else', '#define __assert_unused __unused', '#endif'
 
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'SPLTableViewBehavior', '~> 0.8.2'
+  s.dependency 'SPLTableViewBehavior', '~> 0.8.3'
 end
