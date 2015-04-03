@@ -25,5 +25,5 @@ Pod::Spec.new do |s|
   s.prefix_header_contents = '#ifndef NS_BLOCK_ASSERTIONS', '#define __assert_unused', '#else', '#define __assert_unused __unused', '#endif'
 
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'SPLTableViewBehavior', '~> 0.8.0'
+  s.dependency 'SPLTableViewBehavior', '~> 0.8.2'
 end

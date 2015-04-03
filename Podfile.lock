@@ -1,9 +1,9 @@
 PODS:
   - Expecta (0.3.2)
   - SLCoreDataStack (0.8.9)
-  - SPLFormular (0.4.0):
-    - SPLTableViewBehavior (~> 0.8.0)
-  - SPLTableViewBehavior (0.8.1)
+  - SPLFormular (0.5.0):
+    - SPLTableViewBehavior (~> 0.8.2)
+  - SPLTableViewBehavior (0.8.2)
 
 DEPENDENCIES:
   - Expecta
@@ -17,7 +17,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Expecta: 8c507baf13211207b1e9d0a741480600e6b4ed15
   SLCoreDataStack: b911897db2e0c4f371c5c1a038990a9da49f284e
-  SPLFormular: cd67dc5656fa368411a77c31a09b918e14edf68f
-  SPLTableViewBehavior: e94ee1b3b4ceae7b7e99d0579fdea575cb7ea5ad
+  SPLFormular: 533de233f0eb634d7834578dc271d34c979a52ac
+  SPLTableViewBehavior: 1f4a8302242491e0760ee6a10fc3478bd34cd759
 
 COCOAPODS: 0.36.1
