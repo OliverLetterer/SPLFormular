@@ -73,10 +73,10 @@ typedef NS_ENUM(NSInteger, _SPLSelectEnumValuesViewControllerType) {
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
     [self doesNotRecognizeSelector:_cmd];
-    return [self initWithField:nil humanReadableOptions:nil values:nil];
+    return [self initWithField:nil title:nil humanReadableOptions:nil values:nil];
 }
 
-- (instancetype)initWithField:(id<SPLFormField>)field humanReadableOptions:(NSArray *)options values:(NSArray *)values
+- (instancetype)initWithField:(id<SPLFormField>)field title:(NSString *)title humanReadableOptions:(NSArray *)options values:(NSArray *)values
 {
     if (self = [super initWithStyle:UITableViewStylePlain]) {
         _field = field;
@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, _SPLSelectEnumValuesViewControllerType) {
         _values = values.copy;
         _selectedObjects = [NSMutableSet set];
 
-        self.title = _field.name;
+        self.title = title;
         id value = [field.object valueForKey:field.property];
 
         objc_property_t property = class_getProperty([field.object class], field.property.UTF8String);

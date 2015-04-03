@@ -117,7 +117,7 @@
 
 - (void)_showEnumViewControllerFromCell:(UITableViewCell *)cell
 {
-    _SPLSelectEnumValuesViewController *viewController = [[_SPLSelectEnumValuesViewController alloc] initWithField:self humanReadableOptions:self.downloadedFormatter.options values:self.downloadedFormatter.values];
+    _SPLSelectEnumValuesViewController *viewController = [[_SPLSelectEnumValuesViewController alloc] initWithField:self title:self.name humanReadableOptions:self.downloadedFormatter.options values:self.downloadedFormatter.values];
     viewController.delegate = self;
 
     UIViewController *parentViewController = (UIViewController *)cell.nextResponder;

@@ -182,7 +182,7 @@
 
 - (void)_showEnumViewControllerFromCell:(UITableViewCell *)cell
 {
-    _SPLSelectEnumValuesViewController *viewController = [[_SPLSelectEnumValuesViewController alloc] initWithField:self humanReadableOptions:self.formatter.options values:self.formatter.values];
+    _SPLSelectEnumValuesViewController *viewController = [[_SPLSelectEnumValuesViewController alloc] initWithField:self title:self.name humanReadableOptions:self.formatter.options values:self.formatter.values];
     viewController.delegate = self;
     viewController.additionalRightBarButtonItems = self.additionalRightBarButtonItems;
 
