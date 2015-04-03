@@ -22,11 +22,16 @@
 
 #import "SPLFormSwitchCell.h"
 
+@interface SPLFormSwitchCell ()
+@property (nonatomic, readonly) UITableViewCellStyle myStyle;
+@end
+
 @implementation SPLFormSwitchCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        _myStyle = style;
         _switchControl = [[UISwitch alloc] initWithFrame:CGRectZero];
         _switchControl.userInteractionEnabled = NO;
         [self.contentView addSubview:_switchControl];
@@ -53,7 +58,7 @@
         self.textLabel.frame = UIEdgeInsetsInsetRect(self.textLabel.frame, UIEdgeInsetsMake(0.0, 0.0, 0.0, - overlap));
     }
 
-    if (CGRectGetMaxX(self.detailTextLabel.frame) > CGRectGetMinX(self.switchControl.frame) - 7.0) {
+    if (self.myStyle == UITableViewCellStyleSubtitle && CGRectGetMaxX(self.detailTextLabel.frame) > CGRectGetMinX(self.switchControl.frame) - 7.0) {
         CGFloat availableWidth = CGRectGetMinX(self.switchControl.frame) - 7.0 - CGRectGetMinX(self.detailTextLabel.frame);
         CGFloat availableHeight = CGRectGetHeight(bounds) - CGRectGetMinY(self.detailTextLabel.frame) - 7.0;
 
@@ -61,6 +66,12 @@
 
         CGRect frame = self.detailTextLabel.frame;
         frame.size = size;
+        self.detailTextLabel.frame = frame;
+    }
+
+    if (self.myStyle == UITableViewCellStyleValue1) {
+        CGRect frame = self.detailTextLabel.frame;
+        frame.origin.x = CGRectGetMinX(self.switchControl.frame) - CGRectGetWidth(frame) - 7.0;
         self.detailTextLabel.frame = frame;
     }
 }
