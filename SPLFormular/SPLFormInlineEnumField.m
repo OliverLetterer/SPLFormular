@@ -11,14 +11,6 @@
 #import "SPLDefines.h"
 #import "RuntimeHelpers.h"
 
-
-
-@interface SPLFormInlineEnumField ()
-
-@end
-
-
-
 @implementation SPLFormInlineEnumField
 @synthesize tableViewBehavior = _tableViewBehavior;
 
@@ -43,6 +35,9 @@
         return _tableViewBehavior;
     }
 
+    objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
+    Class propertyClass = property_getObjcClass(property);
+
     SPLFormTableViewCell *prototype = [[SPLFormTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"SPLFormInlineEnumFieldSPLFormTableViewCell"];
     prototype.selectionStyle = UITableViewCellSelectionStyleBlue;
 
@@ -52,15 +47,33 @@
 
         id currentValue = [self.object valueForKey:self.property];
         cell.textLabel.text = [self.formatter stringForObjectValue:cellValue];
-        cell.accessoryType = currentValue == cellValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-    } action:^(id object) {
+
+        if (propertyClass == [NSSet class] || propertyClass == [NSArray class]) {
+            NSSet *collection = [[self.object valueForKey:self.property] mutableCopy];
+            cell.accessoryType = [collection containsObject:cellValue] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        } else {
+            cell.accessoryType = currentValue == cellValue ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        }
+    } action:^(id selectedObject) {
         __strongify(self);
 
-        [self.object setValue:object forKey:self.property];
+        if (propertyClass == [NSSet class] || propertyClass == [NSArray class]) {
+            NSMutableSet *mutableCollection = [[self.object valueForKey:self.property] mutableCopy];
+            if ([mutableCollection containsObject:selectedObject]) {
+                [mutableCollection removeObject:selectedObject];
+            } else {
+                [mutableCollection addObject:selectedObject];
+            }
+
+            [self.object setValue:mutableCollection forKey:self.property];
+        } else {
+            [self.object setValue:selectedObject forKey:self.property];
+        }
+
         [self.tableViewBehavior.update reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone fromTableViewBehavior:self.tableViewBehavior];
         self.changeObserver(self);
     }];
-    
+
     return _tableViewBehavior;
 }
 
@@ -70,7 +83,7 @@
     Class propertyClass = property_getObjcClass(property);
 
     if (propertyClass == [NSSet class] || propertyClass == [NSArray class]) {
-        [NSException raise:NSInternalInconsistencyException format:@"%@[%@] should be a collection type %@", object_getClass(self.object), self.property, propertyClass];
+        return;
     }
 
     for (id value in self.formatter.values) {

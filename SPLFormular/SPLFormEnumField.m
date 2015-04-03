@@ -154,8 +154,6 @@
         if (propertyClass == [NSSet class] || propertyClass == [NSArray class]) {
             NSArray *selectedValues = value;
             cell.detailTextLabel.text = [NSString stringWithFormat:NSLocalizedString(@"%@ selected", @""), @(selectedValues.count)];
-//        } else if ((self.values.count == 0 && self.downloadBlock) || (value == nil)) {
-//            cell.detailTextLabel.text = self.placeholder;
         } else {
             cell.detailTextLabel.text = [self.formatter stringForObjectValue:value];
         }
