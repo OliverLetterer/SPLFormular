@@ -69,6 +69,11 @@
 
     self.tableView.rowHeight = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 88.0 : 66.0;
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
+
+    self.navigationItem.rightBarButtonItems = @[
+                                                self.navigationItem.rightBarButtonItem,
+                                                [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(_resetForm)],
+                                                ];
 }
 
 - (void)saveWithCompletionHandler:(void (^)(NSError *))completionHandler
@@ -115,6 +120,35 @@
         [context save:&saveError];
         NSCAssert(saveError == nil, @"error saving managed object context: %@", saveError);
     }];
+}
+
+- (void)_resetForm
+{
+    TestObject *object = [TestObject new];
+
+    UITableViewCell *dataPrototype = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"dataPrototype"];
+    dataPrototype.selectionStyle = UITableViewCellSelectionStyleNone;
+
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:NSStringFromClass([ManagedObject class])];
+    fetchRequest.sortDescriptors = @[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:YES] ];
+
+    NSFetchedResultsController *controller = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                                 managedObjectContext:[CoreDataStack sharedInstance].mainThreadManagedObjectContext
+                                                                                   sectionNameKeyPath:nil
+                                                                                            cacheName:nil];
+
+    SPLFetchedResultsBehavior *managedObjects = [[SPLFetchedResultsBehavior alloc] initWithPrototype:dataPrototype controller:controller configuration:^(UITableViewCell *cell, ManagedObject *object) {
+        cell.textLabel.text = object.name;
+        cell.detailTextLabel.text = [NSDateFormatter localizedStringFromDate:object.date dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterShortStyle];
+    }];
+
+    SPLFormular *formular = [[SPLDummyFormular alloc] initWithObject:object];
+    SPLCompoundBehavior *tableViewBehavior = [[SPLCompoundBehavior alloc] initWithBehaviors:@[
+                                                                                              [[SPLCompoundBehavior alloc] initWithFormular:formular],
+                                                                                              [[SPLSectionBehavior alloc] initWithTitle:@"CoreData" behaviors:@[ managedObjects ]]
+                                                                                              ]];
+
+    [self setFormular:formular withTableViewBehavior:tableViewBehavior];
 }
 
 @end

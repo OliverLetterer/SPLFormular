@@ -37,6 +37,8 @@ static double doubleValue(NSString *text)
 
 @interface SPLFormField () <UIPopoverPresentationControllerDelegate>
 
+@property (nonatomic, readonly) NSPointerArray *registeredControls;
+
 @end
 
 
@@ -58,6 +60,7 @@ static double doubleValue(NSString *text)
         _name = name;
         _type = type;
         _placeholder = placeholder;
+        _registeredControls = [NSPointerArray weakObjectsPointerArray];
 
         objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
         Class propertyClass = property_getObjcClass(property);
@@ -94,6 +97,19 @@ static double doubleValue(NSString *text)
         }
     }
     return self;
+}
+
+- (void)dealloc
+{
+    for (UIControl *control in self.registeredControls) {
+        for (NSString *action in [control actionsForTarget:self forControlEvent:UIControlEventValueChanged]) {
+            [control removeTarget:self action:NSSelectorFromString(action) forControlEvents:UIControlEventValueChanged];
+        }
+
+        for (NSString *action in [control actionsForTarget:self forControlEvent:UIControlEventEditingChanged]) {
+            [control removeTarget:self action:NSSelectorFromString(action) forControlEvents:UIControlEventEditingChanged];
+        }
+    }
 }
 
 - (BOOL)validateObjectValue
@@ -174,19 +190,22 @@ static double doubleValue(NSString *text)
                 [textField removeTarget:target action:NSSelectorFromString(action) forControlEvents:UIControlEventEditingChanged];
             }
         }
+
         [textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+        [self.registeredControls addPointer:(__bridge void *)(textField)];
     };
 
     void(^setupSwitchTargets)(UISwitch *textField) = ^(UISwitch *switchControl) {
         __strongify(self);
 
         for (id target in switchControl.allTargets) {
-            for (NSString *action in [switchControl actionsForTarget:target forControlEvent:UIControlEventEditingChanged]) {
-                [switchControl removeTarget:target action:NSSelectorFromString(action) forControlEvents:UIControlEventEditingChanged];
+            for (NSString *action in [switchControl actionsForTarget:target forControlEvent:UIControlEventValueChanged]) {
+                [switchControl removeTarget:target action:NSSelectorFromString(action) forControlEvents:UIControlEventValueChanged];
             }
         }
 
         [switchControl addTarget:self action:@selector(_switchChanged:) forControlEvents:UIControlEventValueChanged];
+        [self.registeredControls addPointer:(__bridge void *)(switchControl)];
     };
 
     switch (self.type) {

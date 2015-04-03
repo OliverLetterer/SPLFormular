@@ -36,6 +36,8 @@
 @property (nonatomic, readonly) SPLFormular *formular;
 @property (nonatomic, readonly) id<SPLTableViewBehavior> tableViewBehavior;
 
+- (void)setFormular:(SPLFormular *)formular withTableViewBehavior:(id<SPLTableViewBehavior>)tableViewBehavior;
+
 @property (nonatomic, strong) UIBarButtonItem *cancelBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *saveBarButtonItem;
 @property (nonatomic, readonly) UIBarButtonItem *activityIndicatorBarButtonItem;

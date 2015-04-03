@@ -70,6 +70,23 @@
     return [[UIBarButtonItem alloc] initWithCustomView:activityIndicatorView];
 }
 
+- (void)setFormular:(SPLFormular *)formular withTableViewBehavior:(id<SPLTableViewBehavior>)tableViewBehavior
+{
+    _formular = formular;
+    _tableViewBehavior = tableViewBehavior;
+
+    _initialSnapshot = [[SPLObjectSnapshot alloc] initWithValuesFromObject:_formular.object inFormular:_formular];
+    _formBehavior = [self _findFormularBehaviorInBehavior:tableViewBehavior];
+
+    if (self.isViewLoaded) {
+        _tableViewBehavior.update = self.tableView.tableViewUpdate;
+        self.tableView.delegate = _tableViewBehavior;
+        self.tableView.dataSource = _tableViewBehavior;
+
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark - Initialization
 
 - (instancetype)initWithStyle:(UITableViewStyle)style
@@ -150,7 +167,7 @@
                                                                    delegate:nil
                                                           cancelButtonTitle:NSLocalizedString(@"OK", @"")
                                                           otherButtonTitles:nil];
-                    
+
                     [alert show];
                 }
             };
@@ -330,7 +347,7 @@
         [UIView addKeyframeWithRelativeStartTime:0.6 relativeDuration:0.2 animations:^{
             view.transform = CGAffineTransformMakeTranslation(intensity, 0.0);
         }];
-
+        
         [UIView addKeyframeWithRelativeStartTime:0.8 relativeDuration:0.2 animations:^{
             view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
         }];
