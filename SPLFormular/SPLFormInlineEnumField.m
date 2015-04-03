@@ -24,12 +24,11 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter
+- (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter
 {
     if (self = [super init]) {
         _object = object;
         _property = NSStringFromSelector(property);
-        _name = name;
 
         _formatter = formatter;
 

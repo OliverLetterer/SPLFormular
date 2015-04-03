@@ -18,7 +18,6 @@
 @interface SPLFormInlineEnumField : NSObject <SPLFormField>
 
 @property (nonatomic, copy, readonly) NSString *property;
-@property (nonatomic, copy, readonly) NSString *name;
 
 @property (nonatomic, readonly) id<SPLTableViewBehavior> tableViewBehavior;
 @property (nonatomic, unsafe_unretained, readonly) id object;
@@ -28,6 +27,6 @@
 @property (nonatomic, readonly) SPLEnumFormatter *formatter;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter NS_DESIGNATED_INITIALIZER;
 
 @end

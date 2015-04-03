@@ -28,7 +28,6 @@
 @protocol SPLFormField <NSObject>
 
 @property (nonatomic, copy, readonly) NSString *property;
-@property (nonatomic, copy, readonly) NSString *name;
 
 @property (nonatomic, readonly) id<SPLTableViewBehavior> tableViewBehavior;
 @property (nonatomic, unsafe_unretained, readonly) id object;
