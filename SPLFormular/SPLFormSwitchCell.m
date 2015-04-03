@@ -37,6 +37,7 @@
         [self.contentView addSubview:_switchControl];
 
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.detailTextLabel.numberOfLines = 0;
     }
     return self;
 }
