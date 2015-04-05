@@ -30,6 +30,7 @@
 #import <SPLFormular/SPLFormField.h>
 #import <SPLFormular/SPLFormEnumField.h>
 #import <SPLFormular/SPLFormInlineEnumField.h>
+#import <SPLFormular/SPLDownloadableEnumField.h>
 #import <SPLFormular/SPLFormFieldProtocol.h>
 #import <SPLFormular/SPLFormSection.h>
 #import <SPLFormular/SPLCompoundBehavior+SPLFormular.h>

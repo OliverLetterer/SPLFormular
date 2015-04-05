@@ -26,12 +26,12 @@ typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *form
 
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 
-@property (nonatomic, readonly) SPLEnumFormatter *placeholder;
+@property (nonatomic, copy, readonly) NSString *placeholder;
 @property (nonatomic, strong) SPLEnumFormatter *downloadedFormatter;
 
 @property (nonatomic, copy, readonly) void(^download)(SPLDownloadableEnumFieldDownloadCompletion completion);
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(SPLEnumFormatter *)placeholder download:(void(^)(SPLDownloadableEnumFieldDownloadCompletion completion))download NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder download:(void(^)(SPLDownloadableEnumFieldDownloadCompletion completion))download NS_DESIGNATED_INITIALIZER;
 
 @end

@@ -29,12 +29,13 @@
 {
     if (downloadedFormatter != _downloadedFormatter) {
         _downloadedFormatter = downloadedFormatter;
+        [self _checkConsistency];
 
         [self.tableViewBehavior.update reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:0] ] withRowAnimation:UITableViewRowAnimationNone fromTableViewBehavior:self.tableViewBehavior];
     }
 }
 
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(SPLEnumFormatter *)placeholder download:(void(^)(SPLDownloadableEnumFieldDownloadCompletion completion))download
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder download:(void(^)(SPLDownloadableEnumFieldDownloadCompletion completion))download
 {
     if (self = [super init]) {
         _object = object;
@@ -82,7 +83,7 @@
             [activityIndicator startAnimating];
             cell.accessoryView = activityIndicator;
         } else {
-            cell.detailTextLabel.text = [self.placeholder stringForObjectValue:value];
+            cell.detailTextLabel.text = self.placeholder;
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     } action:^(SPLFormTableViewCell *cell) {
@@ -99,9 +100,8 @@
             self.download(^(SPLEnumFormatter *formatter, NSError *error) {
                 __strongify(self);
 
-                self.downloadedFormatter = formatter;
                 self.isDownloading = NO;
-                [self _checkConsistency];
+                self.downloadedFormatter = formatter;
 
                 if (self.downloadedFormatter) {
                     [self _showEnumViewControllerFromCell:cell];
@@ -153,12 +153,6 @@
     }
 
     for (id value in self.downloadedFormatter.values) {
-        if (![value isKindOfClass:propertyClass]) {
-            [NSException raise:NSInternalInconsistencyException format:@"Value %@ should be of class %@", value, propertyClass];
-        }
-    }
-
-    for (id value in self.placeholder.values) {
         if (![value isKindOfClass:propertyClass]) {
             [NSException raise:NSInternalInconsistencyException format:@"Value %@ should be of class %@", value, propertyClass];
         }
