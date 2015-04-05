@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <SPLFormular/SPLFormEnumField.h>
 
-typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *formatter);
+typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *formatter, NSError *error);
 
 
 
@@ -27,7 +27,7 @@ typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *form
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 
 @property (nonatomic, readonly) SPLEnumFormatter *placeholder;
-@property (nonatomic, readonly) SPLEnumFormatter *downloadedFormatter;
+@property (nonatomic, strong) SPLEnumFormatter *downloadedFormatter;
 
 @property (nonatomic, copy, readonly) void(^download)(SPLDownloadableEnumFieldDownloadCompletion completion);
 

@@ -25,6 +25,15 @@
 @implementation SPLDownloadableEnumField
 @synthesize tableViewBehavior = _tableViewBehavior;
 
+- (void)setDownloadedFormatter:(SPLEnumFormatter *)downloadedFormatter
+{
+    if (downloadedFormatter != _downloadedFormatter) {
+        _downloadedFormatter = downloadedFormatter;
+
+        [self.tableViewBehavior.update reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:0] ] withRowAnimation:UITableViewRowAnimationNone fromTableViewBehavior:self.tableViewBehavior];
+    }
+}
+
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(SPLEnumFormatter *)placeholder download:(void(^)(SPLDownloadableEnumFieldDownloadCompletion completion))download
 {
     if (self = [super init]) {
@@ -86,11 +95,17 @@
         if (!self.downloadedFormatter) {
             [self _deselectTableViewCell:cell];
 
-            self.download(^(SPLEnumFormatter *formatter) {
+            self.isDownloading = YES;
+            self.download(^(SPLEnumFormatter *formatter, NSError *error) {
                 __strongify(self);
+
+                self.downloadedFormatter = formatter;
+                self.isDownloading = NO;
                 [self _checkConsistency];
-                [self.tableViewBehavior.update reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone fromTableViewBehavior:self.tableViewBehavior];
-                [self _showEnumViewControllerFromCell:cell];
+
+                if (self.downloadedFormatter) {
+                    [self _showEnumViewControllerFromCell:cell];
+                }
             });
 
             [self.tableViewBehavior.update reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone fromTableViewBehavior:self.tableViewBehavior];
