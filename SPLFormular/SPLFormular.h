@@ -33,6 +33,7 @@
 #import <SPLFormular/SPLDownloadableEnumField.h>
 #import <SPLFormular/SPLFormFieldProtocol.h>
 #import <SPLFormular/SPLFormSection.h>
+#import <SPLFormular/SPLPickerFormField.h>
 #import <SPLFormular/SPLCompoundBehavior+SPLFormular.h>
 
 #import <SPLFormular/SPLFormTableViewCell.h>
