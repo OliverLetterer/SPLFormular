@@ -23,7 +23,7 @@
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular behavior:(id<SPLTableViewBehavior>)behavior
 {
     [self doesNotRecognizeSelector:_cmd];
-    return [self init];
+    return nil;
 }
 
 - (instancetype)init

@@ -48,8 +48,10 @@
 
 @property (nonatomic, strong) NSArray *additionalRightBarButtonItems;
 
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
-- (instancetype)initWithStyle:(UITableViewStyle)style UNAVAILABLE_ATTRIBUTE;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithStyle:(UITableViewStyle)style NS_UNAVAILABLE;
+
 - (instancetype)initWithField:(id<SPLFormField>)field title:(NSString *)title humanReadableOptions:(NSArray *)options values:(NSArray *)values NS_DESIGNATED_INITIALIZER;
 
 @end

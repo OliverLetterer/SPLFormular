@@ -89,10 +89,22 @@
 
 #pragma mark - Initialization
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    [self doesNotRecognizeSelector:_cmd];
+    return nil;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    [self doesNotRecognizeSelector:_cmd];
+    return nil;
+}
+
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
     [self doesNotRecognizeSelector:_cmd];
-    return [self initWithStyle:style formular:nil behavior:nil];
+    return nil;
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular

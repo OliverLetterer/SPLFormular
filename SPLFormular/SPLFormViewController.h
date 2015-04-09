@@ -50,7 +50,10 @@
 @property (nonatomic, copy, readonly) void(^completionHandler)(SPLFormViewController *viewController, BOOL didSaveObject);
 - (void)setCompletionHandler:(void (^)(SPLFormViewController *viewController, BOOL didSaveObject))completionHandler;
 
-- (instancetype)initWithStyle:(UITableViewStyle)style UNAVAILABLE_ATTRIBUTE;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
+- (instancetype)initWithStyle:(UITableViewStyle)style NS_UNAVAILABLE;
+
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular;
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular behavior:(id<SPLTableViewBehavior>)behavior NS_DESIGNATED_INITIALIZER;
 

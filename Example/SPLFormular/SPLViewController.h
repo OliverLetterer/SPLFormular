@@ -14,6 +14,6 @@
 @interface SPLViewController : SPLFormViewController
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
-- (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular behavior:(id<SPLTableViewBehavior>)behavior UNAVAILABLE_ATTRIBUTE;
+- (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular behavior:(id<SPLTableViewBehavior>)behavior NS_UNAVAILABLE;
 
 @end
