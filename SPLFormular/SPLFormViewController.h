@@ -37,8 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setFormular:(SPLFormular *)formular withTableViewBehavior:(id<SPLTableViewBehavior>)tableViewBehavior;
 
-@property (nonatomic, strong) UIBarButtonItem *cancelBarButtonItem;
-@property (nonatomic, strong) UIBarButtonItem *saveBarButtonItem;
+@property (nonatomic, nullable) UIBarButtonItem *cancelBarButtonItem;
+@property (nonatomic, nullable) UIBarButtonItem *saveBarButtonItem;
 @property (nonatomic, readonly) UIBarButtonItem *activityIndicatorBarButtonItem;
 
 @property (nonatomic, strong) NSArray *validations;
@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)saveWithCompletionHandler:(void(^)(NSError *__nullable error))completionHandler;
 
 @property (nonatomic, nullable, copy, readonly) void(^completionHandler)(SPLFormViewController *viewController, BOOL didSaveObject);
-- (void)setCompletionHandler:(void (^__nullable)(SPLFormViewController *viewController, BOOL didSaveObject))completionHandler;
+- (void)setCompletionHandler:(nullable void (^)(SPLFormViewController *viewController, BOOL didSaveObject))completionHandler;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;

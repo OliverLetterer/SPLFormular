@@ -26,7 +26,7 @@ typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *__nu
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 
 @property (nonatomic, copy, readonly) NSString *placeholder;
-@property (nonatomic, strong) SPLEnumFormatter *downloadedFormatter;
+@property (nonatomic, nullable) SPLEnumFormatter *downloadedFormatter;
 
 @property (nonatomic, copy, readonly) void(^download)(SPLDownloadableEnumFieldDownloadCompletion completion);
 
