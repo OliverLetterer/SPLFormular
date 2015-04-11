@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import <SPLFormular/SPLFormFieldProtocol.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, SPLFormFieldType) {
     SPLFormFieldTypeHumanText,
     SPLFormFieldTypeMachineText,
@@ -61,3 +63,5 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder type:(SPLFormFieldType)type NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

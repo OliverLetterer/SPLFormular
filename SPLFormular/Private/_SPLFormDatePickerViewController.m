@@ -11,6 +11,16 @@
 
 
 @implementation _SPLFormDatePickerViewController
+@synthesize datePicker = _datePicker;
+
+- (UIDatePicker *)datePicker
+{
+    if (!_datePicker) {
+        [self loadView];
+    }
+    
+    return _datePicker;
+}
 
 - (instancetype)initWithMode:(UIDatePickerMode)mode date:(NSDate *)date observer:(void(^)(NSDate *date))observer
 {

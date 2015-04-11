@@ -12,9 +12,8 @@
 
 
 
-/**
- @abstract  <#abstract comment#>
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLFormInlineEnumField : NSObject <SPLFormField>
 
 @property (nonatomic, copy, readonly) NSString *property;
@@ -30,3 +29,5 @@
 - (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

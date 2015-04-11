@@ -23,9 +23,13 @@
 #import <Foundation/Foundation.h>
 #import <SPLFormular/SPLFormFieldProtocol.h>
 
+
+
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLEnumFormatter : NSFormatter
 
-@property (nonatomic, copy, readonly) NSString *(^format)(id object);
+@property (nonatomic, nullable, copy, readonly) NSString *(^format)(id object);
 
 @property (nonatomic, readonly) NSArray *options;
 @property (nonatomic, readonly) NSArray *values;
@@ -35,10 +39,10 @@
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options;
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder;
 
-- (instancetype)initWithValues:(NSArray *)values format:(NSString *(^)(id object))format;
+- (instancetype)initWithValues:(NSArray *)values format:(nullable NSString *(^)(id object))format;
 - (instancetype)initWithValues:(NSArray *)values placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format;
 
-- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder format:(nullable NSString *(^)(id object))format NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -69,3 +73,5 @@
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

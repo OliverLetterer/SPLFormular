@@ -27,20 +27,21 @@
 
 
 
-/**
- @abstract  <#abstract comment#>
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLFormSection : NSObject <NSFastEnumeration>
 
 @property (nonatomic, readonly) SPLSectionBehavior *tableViewBehavior;
 
-@property (nonatomic, copy, readonly) NSString *name;
+@property (nonatomic, nullable, copy, readonly) NSString *name;
 @property (nonatomic, copy, readonly) NSArray *fields;
 
 - (id<SPLFormField>)objectAtIndexedSubscript:(NSUInteger)idx;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithFields:(NSArray /* SPLFormField */ *(^)())fields;
-- (instancetype)initWithName:(NSString *)name fields:(NSArray /* SPLFormField */ *(^)())fields NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithName:(nullable NSString *)name fields:(NSArray /* SPLFormField */ *(^)())fields NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

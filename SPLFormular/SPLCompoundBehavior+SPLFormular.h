@@ -28,13 +28,16 @@
 
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLCompoundBehavior (SPLFormular)
 
 @property (nonatomic, readonly) SPLFormular *formular;
-@property (nonatomic, copy) dispatch_block_t formularChangeObserver;
+@property (nonatomic, nullable, copy) dispatch_block_t formularChangeObserver;
 
 - (instancetype)initWithFormular:(SPLFormular *)formular;
-
-- (NSIndexPath *)convertIndexPathFromVisibleField:(id<SPLFormField>)field;
+- (NSIndexPath * __nullable)convertIndexPathFromVisibleField:(id<SPLFormField>)field;
 
 @end
+
+NS_ASSUME_NONNULL_END

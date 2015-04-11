@@ -23,6 +23,8 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 static inline Class property_getObjcClass(objc_property_t property)
 {
     char *attributeType = property_copyAttributeValue(property, "T");
@@ -43,3 +45,5 @@ static inline Class property_getObjcClass(objc_property_t property)
     NSString *className = [type substringWithRange:NSMakeRange(2, caretLocation - 2)];
     return NSClassFromString(className);
 }
+
+NS_ASSUME_NONNULL_END

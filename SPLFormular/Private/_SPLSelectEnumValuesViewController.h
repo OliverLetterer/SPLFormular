@@ -25,6 +25,10 @@
 
 @class _SPLSelectEnumValuesViewController;
 
+
+
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol _SPLSelectEnumValuesViewControllerDelegate <NSObject>
 
 - (void)selectEnumValuesViewControllerDidCancel:(_SPLSelectEnumValuesViewController *)viewController;
@@ -52,6 +56,8 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
 - (instancetype)initWithStyle:(UITableViewStyle)style NS_UNAVAILABLE;
 
-- (instancetype)initWithField:(id<SPLFormField>)field title:(NSString *)title humanReadableOptions:(NSArray *)options values:(NSArray *)values NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithField:(id<SPLFormField>)field title:(nullable NSString *)title humanReadableOptions:(NSArray *)options values:(NSArray *)values NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

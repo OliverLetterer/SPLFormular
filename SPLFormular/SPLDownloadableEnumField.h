@@ -9,13 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <SPLFormular/SPLFormEnumField.h>
 
-typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *formatter, NSError *error);
+NS_ASSUME_NONNULL_BEGIN
+
+typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *__nullable formatter, NSError *__nullable error);
 
 
 
-/**
- @abstract  <#abstract comment#>
- */
 @interface SPLDownloadableEnumField : NSObject <SPLFormField>
 
 @property (nonatomic, copy, readonly) NSString *property;
@@ -35,3 +34,5 @@ typedef void(^SPLDownloadableEnumFieldDownloadCompletion)(SPLEnumFormatter *form
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder download:(void(^)(SPLDownloadableEnumFieldDownloadCompletion completion))download NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

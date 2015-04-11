@@ -24,9 +24,10 @@
 
 
 
-/**
- @abstract  <#abstract comment#>
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLFormTableViewCell : UITableViewCell
 
 @end
+
+NS_ASSUME_NONNULL_END

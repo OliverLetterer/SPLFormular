@@ -25,6 +25,8 @@
 
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol SPLFormField <NSObject>
 
 @property (nonatomic, copy, readonly) NSString *property;
@@ -38,3 +40,5 @@
 - (BOOL)validateObjectValue;
 
 @end
+
+NS_ASSUME_NONNULL_END

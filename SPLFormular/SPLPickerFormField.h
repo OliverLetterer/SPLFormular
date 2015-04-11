@@ -25,9 +25,8 @@
 
 
 
-/**
- @abstract  <#abstract comment#>
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLPickerFormField : NSObject <SPLFormField>
 
 @property (nonatomic, copy, readonly) NSString *property;
@@ -47,3 +46,5 @@
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder components:(NSArray *)components format:(NSString *(^)(NSArray *selectedComponents))format NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

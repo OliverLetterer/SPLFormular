@@ -25,11 +25,12 @@
 
 
 
-/**
- @abstract  <#abstract comment#>
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLFormSwitchCell : SPLFormTableViewCell
 
 @property (nonatomic, readonly) UISwitch *switchControl;
 
 @end
+
+NS_ASSUME_NONNULL_END

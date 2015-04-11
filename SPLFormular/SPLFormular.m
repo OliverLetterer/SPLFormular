@@ -29,7 +29,7 @@
 
 - (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections
 {
-    return [self initWithObject:object sections:sections predicates:nil];
+    return [self initWithObject:object sections:sections predicates:@{}];
 }
 
 - (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections predicates:(NSDictionary *)predicates

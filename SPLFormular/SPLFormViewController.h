@@ -28,9 +28,8 @@
 
 
 
-/**
- @abstract  <#abstract comment#>
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SPLFormViewController : UITableViewController
 
 @property (nonatomic, readonly) SPLFormular *formular;
@@ -43,12 +42,12 @@
 @property (nonatomic, readonly) UIBarButtonItem *activityIndicatorBarButtonItem;
 
 @property (nonatomic, strong) NSArray *validations;
-- (BOOL)validateForm:(id<SPLFormField> *)failingField error:(NSString **)error;
+- (BOOL)validateForm:(id<SPLFormField>__nullable *__nullable)failingField error:(NSString *__nullable *__nullable)error;
 
-- (void)saveWithCompletionHandler:(void(^)(NSError *error))completionHandler;
+- (void)saveWithCompletionHandler:(void(^)(NSError *__nullable error))completionHandler;
 
-@property (nonatomic, copy, readonly) void(^completionHandler)(SPLFormViewController *viewController, BOOL didSaveObject);
-- (void)setCompletionHandler:(void (^)(SPLFormViewController *viewController, BOOL didSaveObject))completionHandler;
+@property (nonatomic, nullable, copy, readonly) void(^completionHandler)(SPLFormViewController *viewController, BOOL didSaveObject);
+- (void)setCompletionHandler:(void (^__nullable)(SPLFormViewController *viewController, BOOL didSaveObject))completionHandler;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_UNAVAILABLE;
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_UNAVAILABLE;
@@ -58,3 +57,5 @@
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular behavior:(id<SPLTableViewBehavior>)behavior NS_DESIGNATED_INITIALIZER;
 
 @end
+
+NS_ASSUME_NONNULL_END

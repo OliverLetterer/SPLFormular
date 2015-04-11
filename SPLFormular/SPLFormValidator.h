@@ -11,9 +11,13 @@
 @class SPLFormular;
 @protocol SPLFormField;
 
+
+
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol SPLFormValidator <NSObject>
 
-- (BOOL)validateForm:(SPLFormular *)form failingField:(id<SPLFormField> *)failingField error:(NSString **)error;
+- (BOOL)validateForm:(SPLFormular *)form failingField:(id<SPLFormField>__nullable *__nullable)failingField error:(NSString *__nullable *__nullable)error;
 
 @end
 
@@ -24,8 +28,10 @@
  */
 @interface SPLFormValidator : NSObject <SPLFormValidator>
 
-@property (nonatomic, copy, readonly) BOOL(^block)(SPLFormular *formular, id<SPLFormField> *failingField, NSString **error);
+@property (nonatomic, copy, readonly) BOOL(^block)(SPLFormular *formular, id<SPLFormField>__nullable *__nullable failingField, NSString *__nullable *__nullable error);
 
-- (instancetype)initWithBlock:(BOOL(^)(SPLFormular *formular, id<SPLFormField> *failingField, NSString **error))block;
+- (instancetype)initWithBlock:(BOOL(^)(SPLFormular *formular, id<SPLFormField>__nullable *__nullable failingField, NSString *__nullable *__nullable error))block;
 
 @end
+
+NS_ASSUME_NONNULL_END

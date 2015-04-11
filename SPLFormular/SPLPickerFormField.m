@@ -35,7 +35,7 @@
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name components:(NSArray *)components format:(NSString *(^)(NSArray *selectedComponents))format
 {
-    return [self initWithObject:object property:property name:name placeholder:nil components:components format:format];
+    return [self initWithObject:object property:property name:name placeholder:@"" components:components format:format];
 }
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder components:(NSArray *)components format:(NSString *(^)(NSArray *selectedComponents))format
