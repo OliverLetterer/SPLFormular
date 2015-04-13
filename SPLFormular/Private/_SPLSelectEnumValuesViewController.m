@@ -72,20 +72,17 @@ typedef NS_ENUM(NSInteger, _SPLSelectEnumValuesViewControllerType) {
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    return [super initWithCoder:aDecoder];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    return [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style
 {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    return [super initWithStyle:style];
 }
 
 - (instancetype)initWithField:(id<SPLFormField>)field title:(NSString *)title humanReadableOptions:(NSArray *)options values:(NSArray *)values
