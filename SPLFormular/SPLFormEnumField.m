@@ -30,7 +30,7 @@
 
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options
 {
-    return [self initWithValues:values options:options placeholder:@"" format:nil];
+    return [self initWithValues:values options:options placeholder:nil format:nil];
 }
 
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder
@@ -45,7 +45,7 @@
         [options addObject:format(object)];
     }
 
-    return [self initWithValues:values options:options placeholder:@"" format:format];
+    return [self initWithValues:values options:options placeholder:nil format:format];
 }
 
 - (instancetype)initWithValues:(NSArray *)values placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format

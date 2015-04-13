@@ -49,7 +49,7 @@ static double doubleValue(NSString *text)
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type
 {
-    return [self initWithObject:object property:property name:name placeholder:@"" type:type];
+    return [self initWithObject:object property:property name:name placeholder:name type:type];
 }
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder type:(SPLFormFieldType)type

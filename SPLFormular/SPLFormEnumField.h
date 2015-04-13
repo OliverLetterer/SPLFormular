@@ -34,15 +34,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray *options;
 @property (nonatomic, readonly) NSArray *values;
 
-@property (nonatomic, readonly) NSString *placeholder;
+@property (nonatomic, nullable, readonly) NSString *placeholder;
 
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options;
-- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder;
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(nullable NSString *)placeholder;
 
 - (instancetype)initWithValues:(NSArray *)values format:(nullable NSString *(^)(id object))format;
 - (instancetype)initWithValues:(NSArray *)values placeholder:(NSString *)placeholder format:(NSString *(^)(id object))format;
 
-- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(NSString *)placeholder format:(nullable NSString *(^)(id object))format NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(nullable NSString *)placeholder format:(nullable NSString *(^)(id object))format NS_DESIGNATED_INITIALIZER;
 
 @end
 
