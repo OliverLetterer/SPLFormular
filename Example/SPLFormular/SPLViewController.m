@@ -12,18 +12,27 @@
 #import "SPLDummyFormular.h"
 
 
-@interface SPLViewController ()
-
-@end
-
-
 
 @implementation SPLViewController
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    return [super initWithCoder:aDecoder];
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    return [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+}
+
+- (instancetype)initWithStyle:(UITableViewStyle)style
+{
+    return [super initWithStyle:style];
+}
+
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular behavior:(id<SPLTableViewBehavior>)behavior
 {
-    [self doesNotRecognizeSelector:_cmd];
-    return nil;
+    return [super initWithStyle:style formular:formular behavior:behavior];
 }
 
 - (instancetype)init
