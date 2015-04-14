@@ -218,7 +218,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeYes;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -236,7 +236,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -254,7 +254,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -272,7 +272,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -290,7 +290,7 @@ static double doubleValue(NSString *text)
 
                 cell.textLabel.text = self.name;
                 cell.textField.text = value;
-                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeYes;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -313,7 +313,7 @@ static double doubleValue(NSString *text)
                 }
 
                 cell.textLabel.text = self.name;
-                cell.textField.placeholder = self.placeholder ?: cell.textLabel.text;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -330,8 +330,8 @@ static double doubleValue(NSString *text)
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
-                cell.textField.text = value ? [NSString stringWithFormat:@"%0.02lf", [value doubleValue]] : self.placeholder;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.text = value ? [NSString stringWithFormat:@"%0.02lf", [value doubleValue]] : nil;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
@@ -348,8 +348,8 @@ static double doubleValue(NSString *text)
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
-                cell.textField.text = value ?: self.placeholder;
-                cell.textField.placeholder = cell.textLabel.text;
+                cell.textField.text = value;
+                cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
                 cell.textField.accessibilityLabel = cell.textLabel.text;
