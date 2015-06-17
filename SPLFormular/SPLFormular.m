@@ -27,6 +27,11 @@
 
 @implementation SPLFormular
 
+- (instancetype)init
+{
+    return [super init];
+}
+
 - (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections
 {
     return [self initWithObject:object sections:sections predicates:@{}];

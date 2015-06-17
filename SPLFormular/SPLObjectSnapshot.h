@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SPLObjectSnapshot : NSObject
 
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithValuesFromObject:(id)object inFormular:(SPLFormular *)formular NS_DESIGNATED_INITIALIZER;
 
 - (BOOL)isEqual:(id)object;

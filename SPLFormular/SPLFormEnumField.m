@@ -28,6 +28,11 @@
 
 @implementation SPLEnumFormatter
 
+- (instancetype)init
+{
+    return [super init];
+}
+
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options
 {
     return [self initWithValues:values options:options placeholder:nil format:nil];
@@ -98,6 +103,11 @@
 
 @implementation SPLFormEnumField
 @synthesize tableViewBehavior = _tableViewBehavior;
+
+- (instancetype)init
+{
+    return [super init];
+}
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter
 {

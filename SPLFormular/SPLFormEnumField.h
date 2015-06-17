@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, nullable, readonly) NSString *placeholder;
 
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
+
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options;
 - (instancetype)initWithValues:(NSArray *)values options:(NSArray *)options placeholder:(nullable NSString *)placeholder;
 
@@ -65,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) SPLEnumFormatter *formatter;
 
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name keyPath:(NSString *)keyPath fromValues:(NSArray *)values DEPRECATED_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name humanReadableOptions:(NSArray *)options values:(NSArray *)values DEPRECATED_ATTRIBUTE;

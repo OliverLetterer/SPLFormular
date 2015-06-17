@@ -33,6 +33,11 @@
 @implementation SPLPickerFormField
 @synthesize tableViewBehavior = _tableViewBehavior;
 
+- (instancetype)init
+{
+    return [super init];
+}
+
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name components:(NSArray *)components format:(NSString *(^)(NSArray *selectedComponents))format
 {
     return [self initWithObject:object property:property name:name placeholder:nil components:components format:format];

@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder type:(SPLFormFieldType)type NS_DESIGNATED_INITIALIZER;
 

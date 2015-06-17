@@ -61,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<SPLFormValidator>)validateEqualValuesForKeys:(NSArray *)equalKeys error:(NSString *)error;
 - (id<SPLFormValidator>)validateOrderedValuesForKeys:(NSArray *)orderedKeys ascending:(BOOL)ascending error:(NSString *)error;
 
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections;
 - (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections predicates:(NSDictionary *)predicates NS_DESIGNATED_INITIALIZER;
 

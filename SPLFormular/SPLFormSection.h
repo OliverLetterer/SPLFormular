@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id<SPLFormField>)objectAtIndexedSubscript:(NSUInteger)idx;
 
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithFields:(NSArray /* SPLFormField */ *(^)())fields;
 - (instancetype)initWithName:(nullable NSString *)name fields:(NSArray /* SPLFormField */ *(^)())fields NS_DESIGNATED_INITIALIZER;
 

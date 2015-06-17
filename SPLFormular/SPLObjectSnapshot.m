@@ -35,6 +35,11 @@
 
 @implementation SPLObjectSnapshot
 
+- (instancetype)init
+{
+    return [super init];
+}
+
 - (instancetype)initWithValuesFromObject:(id)object inFormular:(SPLFormular *)formular
 {
     if (self = [super init]) {

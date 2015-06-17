@@ -16,6 +16,11 @@
 
 #pragma mark - Initialization
 
+- (instancetype)init
+{
+    return [super init];
+}
+
 - (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter
 {
     if (self = [super init]) {

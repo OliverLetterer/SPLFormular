@@ -35,6 +35,11 @@
     }
 }
 
+- (instancetype)init
+{
+    return [super init];
+}
+
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder download:(void(^)(SPLDownloadableEnumFieldDownloadCompletion completion))download
 {
     if (self = [super init]) {

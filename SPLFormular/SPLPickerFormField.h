@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 @property (nonatomic, copy, readonly) NSString *(^format)(NSArray *selectedComponents);
 
-- (instancetype)init UNAVAILABLE_ATTRIBUTE;
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name components:(NSArray *)components format:(NSString *(^)(NSArray *selectedComponents))format;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(nullable NSString *)placeholder components:(NSArray *)components format:(NSString *(^)(NSArray *selectedComponents))format NS_DESIGNATED_INITIALIZER;
 

@@ -53,6 +53,11 @@
     return [self.fields countByEnumeratingWithState:state objects:buffer count:len];
 }
 
+- (instancetype)init
+{
+    return [super init];
+}
+
 - (instancetype)initWithFields:(NSArray /* SPLFormField */ *(^)())fields
 {
     return [self initWithName:nil fields:fields];

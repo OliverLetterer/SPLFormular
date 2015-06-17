@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setCompletionHandler:(nullable void (^)(SPLFormViewController *viewController, BOOL didSaveObject))completionHandler;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER NS_UNAVAILABLE;
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER NS_UNAVAILABLE;
+- (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil NS_DESIGNATED_INITIALIZER NS_UNAVAILABLE;
 - (instancetype)initWithStyle:(UITableViewStyle)style NS_DESIGNATED_INITIALIZER NS_UNAVAILABLE;
 
 - (instancetype)initWithStyle:(UITableViewStyle)style formular:(SPLFormular *)formular;
