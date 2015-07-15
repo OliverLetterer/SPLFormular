@@ -238,7 +238,7 @@
         BOOL firstInNavigationController = self.navigationController.viewControllers.firstObject == self;
         BOOL isBeingPresented = self.isBeingPresented || self.parentViewController.isBeingPresented || self.parentViewController.parentViewController.isBeingPresented;
 
-        if (snapshotIsEqual && !firstInNavigationController && !isBeingPresented) {
+        if (snapshotIsEqual && !firstInNavigationController && !isBeingPresented && !self.alwaysDisplaysCancelBarButtonItem) {
             [self.navigationItem setLeftBarButtonItem:nil animated:YES];
         } else if (self.navigationItem.leftBarButtonItem != self.cancelBarButtonItem) {
             [self.navigationItem setLeftBarButtonItem:self.cancelBarButtonItem animated:YES];

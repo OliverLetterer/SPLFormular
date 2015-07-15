@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setFormular:(SPLFormular *)formular withTableViewBehavior:(id<SPLTableViewBehavior>)tableViewBehavior;
 
 @property (nonatomic, nullable) UIBarButtonItem *cancelBarButtonItem;
+@property (nonatomic, assign) BOOL alwaysDisplaysCancelBarButtonItem;
+
 @property (nonatomic, nullable) UIBarButtonItem *saveBarButtonItem;
 @property (nonatomic, readonly) UIBarButtonItem *activityIndicatorBarButtonItem;
 
