@@ -171,13 +171,9 @@
 
             void(^displayErrorAlert)(NSString *error) = ^(NSString *error) {
                 if (error) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Validation failed", @"")
-                                                                    message:localError
-                                                                   delegate:nil
-                                                          cancelButtonTitle:NSLocalizedString(@"OK", @"")
-                                                          otherButtonTitles:nil];
-
-                    [alert show];
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Validation failed", @"") message:localError preferredStyle:UIAlertControllerStyleAlert];
+                    [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleCancel handler:nil]];
+                    [self presentViewController:alert animated:YES completion:nil];
                 }
             };
 
@@ -279,12 +275,9 @@
         cleanupUI();
 
         if (error) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:error.localizedDescription
-                                                            message:error.localizedFailureReason
-                                                           delegate:nil
-                                                  cancelButtonTitle:NSLocalizedString(@"OK", @"")
-                                                  otherButtonTitles:nil];
-            [alert show];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:error.localizedDescription message:error.localizedFailureReason preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"") style:UIAlertActionStyleCancel handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
             return;
         }
 
@@ -356,7 +349,7 @@
         [UIView addKeyframeWithRelativeStartTime:0.6 relativeDuration:0.2 animations:^{
             view.transform = CGAffineTransformMakeTranslation(intensity, 0.0);
         }];
-        
+
         [UIView addKeyframeWithRelativeStartTime:0.8 relativeDuration:0.2 animations:^{
             view.transform = CGAffineTransformMakeTranslation(0.0, 0.0);
         }];
