@@ -14,6 +14,17 @@
 @implementation SPLFormInlineEnumField
 @synthesize tableViewBehavior = _tableViewBehavior;
 
+#pragma mark - setters and getters
+
+- (void)setFormatter:(SPLEnumFormatter *)formatter
+{
+    if (formatter != _formatter) {
+        _formatter = formatter;
+
+        [self.tableViewBehavior setData:self.formatter.values withAnimation:UITableViewRowAnimationNone];
+    }
+}
+
 #pragma mark - Initialization
 
 - (instancetype)init
