@@ -21,12 +21,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) SPLArrayBehavior *tableViewBehavior;
 @property (nonatomic, unsafe_unretained, readonly) id object;
 
+@property (nonatomic, nullable, copy) void(^action)(id selectedObject);
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
 
 @property (nonatomic, strong) SPLEnumFormatter *formatter;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
-- (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter;
+- (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter action:(void(^_Nullable)(id selectedObject))action NS_DESIGNATED_INITIALIZER;
 
 @end
 

@@ -34,11 +34,17 @@
 
 - (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter
 {
+    return [self initWithObject:object property:property formatter:formatter action:nil];
+}
+
+- (instancetype)initWithObject:(id)object property:(SEL)property formatter:(SPLEnumFormatter *)formatter action:(void (^ _Nullable)(id _Nonnull))action
+{
     if (self = [super init]) {
         _object = object;
         _property = NSStringFromSelector(property);
 
         _formatter = formatter;
+        _action = action;
 
         [self _checkConsistency];
     }
@@ -88,6 +94,10 @@
 
         [self.tableViewBehavior.update reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationNone fromTableViewBehavior:self.tableViewBehavior];
         self.changeObserver(self);
+
+        if (self.action != nil) {
+            self.action([self.object valueForKey:self.property]);
+        }
     }];
 
     return _tableViewBehavior;
