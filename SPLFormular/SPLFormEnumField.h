@@ -62,6 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, unsafe_unretained, readonly) id object;
 
 @property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
+@property (nonatomic, nullable, readonly) dispatch_block_t observer;
 
 @property (nonatomic, strong) NSArray *additionalRightBarButtonItems;
 
@@ -72,7 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name keyPath:(NSString *)keyPath fromValues:(NSArray *)values DEPRECATED_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name humanReadableOptions:(NSArray *)options values:(NSArray *)values DEPRECATED_ATTRIBUTE;
 
-- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter;
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter observer:(nullable dispatch_block_t)observer NS_DESIGNATED_INITIALIZER;
 
 @end
 

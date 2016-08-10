@@ -81,7 +81,7 @@
     if (obj == nil) {
         return self.placeholder ?: @"";
     }
-    
+
     NSInteger index = [self.values indexOfObject:obj];
 
     if (index != NSNotFound) {
@@ -111,10 +111,16 @@
 
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter
 {
+    return [self initWithObject:object property:property name:name formatter:formatter observer:nil];
+}
+
+- (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name formatter:(SPLEnumFormatter *)formatter observer:(nullable dispatch_block_t)observer
+{
     if (self = [super init]) {
         _object = object;
         _property = NSStringFromSelector(property);
         _name = name;
+        _observer = observer;
 
         _formatter = formatter;
 
@@ -171,7 +177,7 @@
         __strongify(self);
         [self _showEnumViewControllerFromCell:cell];
     }];
-    
+
     return _tableViewBehavior;
 }
 
@@ -184,6 +190,10 @@
 {
     [self.object setValue:value forKey:self.property];
     self.changeObserver(self);
+
+    if (self.observer != nil) {
+        self.observer();
+    }
 
     [viewController.navigationController popViewControllerAnimated:YES];
 }
