@@ -51,6 +51,8 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, readonly) SPLFormFieldType type;
 
+@property (nonatomic, assign) BOOL userInteractionEnabled;
+
 @property (nonatomic, readonly) NSString *placeholder;
 
 @property (nonatomic, readonly) id<SPLTableViewBehavior> tableViewBehavior;

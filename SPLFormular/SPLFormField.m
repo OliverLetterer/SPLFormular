@@ -66,6 +66,7 @@ static double doubleValue(NSString *text)
         _type = type;
         _placeholder = placeholder;
         _registeredControls = [NSPointerArray weakObjectsPointerArray];
+        _userInteractionEnabled = YES;
 
         objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
         Class propertyClass = property_getObjcClass(property);
@@ -187,7 +188,7 @@ static double doubleValue(NSString *text)
         [cell.textField becomeFirstResponder];
     };
 
-    void(^setupTextFieldTargets)(UITextField *textField) = ^(UITextField *textField) {
+    void(^setupTextField)(UITextField *textField) = ^(UITextField *textField) {
         __strongify(self);
 
         for (id target in textField.allTargets) {
@@ -198,9 +199,18 @@ static double doubleValue(NSString *text)
 
         [textField addTarget:self action:@selector(_textFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
         [self.registeredControls addPointer:(__bridge void *)(textField)];
+
+        textField.enabled = self.userInteractionEnabled;
+        textField.userInteractionEnabled = self.userInteractionEnabled;
+
+        if (self.userInteractionEnabled) {
+            textField.textColor = [UIColor blackColor];
+        } else {
+            textField.textColor = [UIColor lightGrayColor];
+        }
     };
 
-    void(^setupSwitchTargets)(UISwitch *textField) = ^(UISwitch *switchControl) {
+    void(^setupSwitchControl)(UISwitch *textField) = ^(UISwitch *switchControl) {
         __strongify(self);
 
         for (id target in switchControl.allTargets) {
@@ -211,6 +221,9 @@ static double doubleValue(NSString *text)
 
         [switchControl addTarget:self action:@selector(_switchChanged:) forControlEvents:UIControlEventValueChanged];
         [self.registeredControls addPointer:(__bridge void *)(switchControl)];
+
+        switchControl.enabled = self.userInteractionEnabled;
+        switchControl.userInteractionEnabled = self.userInteractionEnabled;
     };
 
     switch (self.type) {
@@ -218,7 +231,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -236,7 +249,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -254,7 +267,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -272,7 +285,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -290,7 +303,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -308,7 +321,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 if (propertyClass == [NSNumber class]) {
@@ -331,7 +344,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -349,7 +362,7 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
 
-                setupTextFieldTargets(cell.textField);
+                setupTextField(cell.textField);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
@@ -367,13 +380,17 @@ static double doubleValue(NSString *text)
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:switchCell configuration:^(SPLFormSwitchCell *cell) {
                 __strongify(self);
 
-                setupSwitchTargets(cell.switchControl);
+                setupSwitchControl(cell.switchControl);
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
                 [cell.switchControl setOn:[value boolValue] animated:NO];
             } action:^(SPLFormSwitchCell *cell) {
                 __strongify(self);
+
+                if (!self.userInteractionEnabled) {
+                    return;
+                }
 
                 [self _deselectTableViewCell:cell];
                 [cell.switchControl setOn:!cell.switchControl.isOn animated:YES];
@@ -406,6 +423,10 @@ static double doubleValue(NSString *text)
             } action:^(SPLFormSwitchCell *cell) {
                 __strongify(self);
                 [self _deselectTableViewCell:cell];
+
+                if (!self.userInteractionEnabled) {
+                    return;
+                }
 
                 if (self.type == SPLFormFieldTypeDate) {
                     [self _selectDateFromCell:cell inMode:UIDatePickerModeDate];
