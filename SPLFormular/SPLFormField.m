@@ -471,6 +471,7 @@ static double doubleValue(NSString *text)
         case SPLFormFieldTypePassword:
         case SPLFormFieldTypeURL:
         case SPLFormFieldTypeIPAddress:
+        case SPLFormFieldTypeMacAddress:
             [self.object setValue:text forKey:self.property];
             self.changeObserver(self);
             break;
