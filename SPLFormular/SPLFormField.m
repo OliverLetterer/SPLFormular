@@ -78,6 +78,7 @@ static double doubleValue(NSString *text)
             case SPLFormFieldTypePassword:
             case SPLFormFieldTypeURL:
             case SPLFormFieldTypeIPAddress:
+            case SPLFormFieldTypeMacAddress:
                 if (propertyClass != [NSString class]) {
                     [NSException raise:NSInternalInconsistencyException format:@"%@[%@] must be NSString typed", [object class], _property];
                 }
@@ -155,6 +156,9 @@ static double doubleValue(NSString *text)
             break;
         case SPLFormFieldTypeIPAddress:
             return matches(value, @"\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}");
+            break;
+        case SPLFormFieldTypeMacAddress:
+            return matches(value, @"[\\da-fA-F]{2}:[\\da-fA-F]{2}:[\\da-fA-F]{2}:[\\da-fA-F]{2}:[\\da-fA-F]{2}:[\\da-fA-F]{2}");
             break;
     }
 
@@ -358,6 +362,7 @@ static double doubleValue(NSString *text)
             } action:textFieldHandler];
             break;
         }
+        case SPLFormFieldTypeMacAddress:
         case SPLFormFieldTypeIPAddress: {
             _tableViewBehavior = [[SPLTableViewBehavior alloc] initWithPrototype:textFieldCell configuration:^(SPLFormTextFieldCell *cell) {
                 __strongify(self);
@@ -537,6 +542,27 @@ static double doubleValue(NSString *text)
 
     UITableView *tableView = (UITableView *)superview;
     [tableView deselectRowAtIndexPath:tableView.indexPathForSelectedRow animated:NO];
+}
+
+@end
+
+
+
+@implementation SPLGeneralFormField
+
+- (instancetype)init
+{
+    return [super init];
+}
+
+- (instancetype)initWithObject:(id)object property:(SEL)property behavior:(id<SPLTableViewBehavior>)behavior
+{
+    if (self = [super init]) {
+        _object = object;
+        _property = NSStringFromSelector(property);
+        _tableViewBehavior = behavior;
+    }
+    return self;
 }
 
 @end

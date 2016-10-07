@@ -37,7 +37,8 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
     SPLFormFieldTypeBoolean,
     SPLFormFieldTypeDate,
     SPLFormFieldTypeTime,
-    SPLFormFieldTypeDateAndTime
+    SPLFormFieldTypeDateAndTime,
+    SPLFormFieldTypeMacAddress,
 };
 
 
@@ -45,6 +46,7 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 /**
  @abstract  <#abstract comment#>
  */
+__attribute__((objc_subclassing_restricted))
 @interface SPLFormField : NSObject <SPLFormField>
 
 @property (nonatomic, copy, readonly) NSString *property;
@@ -63,6 +65,23 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 - (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name type:(SPLFormFieldType)type;
 - (instancetype)initWithObject:(id)object property:(SEL)property name:(NSString *)name placeholder:(NSString *)placeholder type:(SPLFormFieldType)type NS_DESIGNATED_INITIALIZER;
+
+@end
+
+
+
+__attribute__((objc_subclassing_restricted))
+@interface SPLGeneralFormField : NSObject <SPLFormField>
+
+@property (nonatomic, copy, readonly) NSString *property;
+
+@property (nonatomic, readonly) id<SPLTableViewBehavior> tableViewBehavior;
+@property (nonatomic, unsafe_unretained, readonly) id object;
+
+@property (nonatomic, copy) void(^changeObserver)(id<SPLFormField> sender);
+
+- (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
+- (instancetype)initWithObject:(id)object property:(SEL)property behavior:(id<SPLTableViewBehavior>)behavior NS_DESIGNATED_INITIALIZER;
 
 @end
 
