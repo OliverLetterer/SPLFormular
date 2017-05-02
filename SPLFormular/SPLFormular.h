@@ -47,9 +47,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol SPLFormObject <NSObject>
+
+- (nullable id)persistChanges:(NSError **)error;
+- (void)discardChanges;
+
+@end
+
+
+
 @interface SPLFormular : NSObject <NSFastEnumeration>
 
-@property (nonatomic, readonly) id object;
+@property (nonatomic, readonly) id<SPLFormObject> object;
 
 @property (nonatomic, copy, readonly) NSArray *sections;
 @property (nonatomic, copy, readonly) NSDictionary *predicates;
@@ -62,8 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (id<SPLFormValidator>)validateOrderedValuesForKeys:(NSArray *)orderedKeys ascending:(BOOL)ascending error:(NSString *)error;
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER UNAVAILABLE_ATTRIBUTE;
-- (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections;
-- (instancetype)initWithObject:(id)object sections:(NSArray /* SPLFormSection */ *)sections predicates:(NSDictionary *)predicates NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithObject:(id<SPLFormObject>)object sections:(NSArray<SPLFormSection *> *)sections;
+- (instancetype)initWithObject:(id<SPLFormObject>)object sections:(NSArray<SPLFormSection *> *)sections predicates:(NSDictionary<NSString *, NSPredicate *> *)predicates NS_DESIGNATED_INITIALIZER;
 
 @end
 

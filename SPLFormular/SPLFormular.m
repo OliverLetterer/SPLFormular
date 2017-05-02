@@ -87,7 +87,7 @@
                 return NO;
             }
 
-            if (![formular.object valueForKey:field.property]) {
+            if (![(id)formular.object valueForKey:field.property]) {
                 if (failingField) {
                     *failingField = field;
                 }
@@ -121,7 +121,7 @@
                 continue;
             }
             
-            if (![formular.object valueForKey:field.property]) {
+            if (![(id)formular.object valueForKey:field.property]) {
                 if (failingField) {
                     *failingField = field;
                 }
@@ -157,7 +157,7 @@
                 continue;
             }
 
-            id currentValue = [formular.object valueForKey:field.property];
+            id currentValue = [(id)formular.object valueForKey:field.property];
 
             if (!expectedValue) {
                 expectedValue = currentValue;
@@ -192,7 +192,7 @@
         NSDictionary *fieldsByProperty = [self _fieldsByProperty];
 
         for (NSString *key in orderedKeys) {
-            id currentValue = [formular.object valueForKey:key];
+            id currentValue = [(id)formular.object valueForKey:key];
 
             if (!currentValue) {
                 if (failingField) {
