@@ -58,12 +58,12 @@
     return [super init];
 }
 
-- (instancetype)initWithFields:(NSArray /* SPLFormField */ *(^)())fields
+- (instancetype)initWithFields:(NSArray /* SPLFormField */ *(^)(void))fields
 {
     return [self initWithName:nil fields:fields];
 }
 
-- (instancetype)initWithName:(NSString *)name fields:(NSArray /* SPLFormField */ *(^)())fields
+- (instancetype)initWithName:(NSString *)name fields:(NSArray /* SPLFormField */ *(^)(void))fields
 {
     if (self = [super init]) {
         _name = name.copy;
