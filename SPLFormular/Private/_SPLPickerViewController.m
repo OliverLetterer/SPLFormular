@@ -35,7 +35,7 @@
 
     if (self.selectedComponents.count > 0) {
         [self.selectedComponents enumerateObjectsUsingBlock:^(NSString *value, NSUInteger component, BOOL *stop) {
-            [_pickerView selectRow:[self.components[component] indexOfObject:value] inComponent:component animated:NO];
+            [self.pickerView selectRow:[self.components[component] indexOfObject:value] inComponent:component animated:NO];
         }];
     }
 
