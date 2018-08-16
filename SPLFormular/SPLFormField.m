@@ -29,6 +29,8 @@
 
 #import "_SPLFormDatePickerViewController.h"
 
+#import <objc/runtime.h>
+
 static double doubleValue(NSString *text)
 {
     return [text stringByReplacingOccurrencesOfString:@"," withString:@"."].doubleValue;
@@ -38,12 +40,23 @@ static double doubleValue(NSString *text)
 @interface SPLFormField () <UIPopoverPresentationControllerDelegate>
 
 @property (nonatomic, readonly) NSPointerArray *registeredControls;
+@property (nonatomic, readonly) NSNumberFormatter *priceFormatter;
 
 @end
 
 
 @implementation SPLFormField
 @synthesize tableViewBehavior = _tableViewBehavior;
+
++ (NSInteger)pricePrecision
+{
+    return objc_getAssociatedObject(self, @selector(pricePrecision)) ? [objc_getAssociatedObject(self, @selector(pricePrecision)) integerValue] : 2;
+}
+
++ (void)setPricePrecision:(NSInteger)pricePrecision
+{
+    objc_setAssociatedObject(self, @selector(pricePrecision), @(pricePrecision), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 #pragma mark - Initialization
 
@@ -70,6 +83,14 @@ static double doubleValue(NSString *text)
 
         objc_property_t property = class_getProperty([self.object class], self.property.UTF8String);
         Class propertyClass = property_getObjcClass(property);
+
+        _priceFormatter = [[NSNumberFormatter alloc] init];
+        _priceFormatter.locale = [NSLocale currentLocale];
+        _priceFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+        _priceFormatter.minimumFractionDigits = SPLFormField.pricePrecision;
+        _priceFormatter.maximumFractionDigits = SPLFormField.pricePrecision;
+        _priceFormatter.groupingSeparator = nil;
+        _priceFormatter.groupingSize = 0;
 
         switch (_type) {
             case SPLFormFieldTypeHumanText:
@@ -352,7 +373,7 @@ static double doubleValue(NSString *text)
                 id value = [self.object valueForKey:self.property];
 
                 cell.textLabel.text = self.name;
-                cell.textField.text = value ? [NSString stringWithFormat:@"%0.02lf", [value doubleValue]] : nil;
+                cell.textField.text = value ? [self.priceFormatter stringFromNumber:value ?: @0] : nil;
                 cell.textField.placeholder = self.placeholder;
                 cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
                 cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;

@@ -49,6 +49,8 @@ typedef NS_ENUM(NSInteger, SPLFormFieldType) {
 __attribute__((objc_subclassing_restricted))
 @interface SPLFormField : NSObject <SPLFormField>
 
+@property (nonatomic, class, assign) NSInteger pricePrecision;
+
 @property (nonatomic, copy, readonly) NSString *property;
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, readonly) SPLFormFieldType type;
