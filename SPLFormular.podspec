@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "SPLFormular"
-  s.version          = "1.0.2"
+  s.version          = "1.0.3"
   s.summary          = "Simply dynamic formulars, backed by SPLTableViewBehavior."
   s.homepage         = "https://github.com/OliverLetterer/SPLFormular"
   s.license          = 'MIT'
